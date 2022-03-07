@@ -1,0 +1,25 @@
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Hello From Android bbbbbbbbbbbbbbbbbbb"
+        android:textColor="#2196F3"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/btn1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:singleLine="true"
+        android:scrollHorizontally="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"/>
+
+
+        val tv1 = findViewById<TextView>(R.id.tv1);
+        tv1.isSelected = true;
+
+NB: android:marqueeRepeatLimit="1"

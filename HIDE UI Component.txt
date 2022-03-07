@@ -1,0 +1,4 @@
+
+                btnClick.visibility = View.INVISIBLE
+                btnClick.visibility = View.VISIBLE
+                btnClick.visibility = View.GONE

@@ -1,0 +1,8 @@
+
+        btnClick.setOnClickListener {
+            Log.i("MYLOGTAG","You clicked a button")
+        }
+
+        txtViewClick.setOnClickListener {
+            Log.i("MYLOGTAG","You clicked a textview")
+        }

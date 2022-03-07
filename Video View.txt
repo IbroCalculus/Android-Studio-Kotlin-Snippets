@@ -1,0 +1,4 @@
+
+Create new Directory of resource type raw, Paste video into it.
+
+Place videoview into FrameLayout (FrameLayout used to place constrollers on video player, else; controller display on bottom)

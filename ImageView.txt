@@ -1,0 +1,4 @@
+
+        btnClick.setOnClickListener {
+            imageView.setImageResource(R.drawable.pic1)
+        }

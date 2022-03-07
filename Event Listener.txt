@@ -1,0 +1,8 @@
+
+============ CLICK EVENT LISTENER ==================
+
+        val btnClick: Button = findViewById(R.id.btnClick);
+
+        btnClick.setOnClickListener {
+            Toast.makeText(this, "This is a toast message", Toast.LENGTH_LONG).show()
+        }

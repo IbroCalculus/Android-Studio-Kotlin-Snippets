@@ -1,0 +1,6 @@
+
+====== SIMPLE SNACKBAR ===================
+
+        Snackbar.make(constraintLayout, "This is a snackbar", Snackbar.LENGTH_LONG).show()
+
+=========== MORE ====================

@@ -1,0 +1,34 @@
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var et_userName: EditText
+    private lateinit var et_pswd: EditText
+    private lateinit var btnSave: Button
+
+    private lateinit var sf: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+        setContentView(R.layout.activity_main)
+
+        et_userName = findViewById(R.id.et_userName)
+        et_pswd = findViewById(R.id.et_pswd)
+        btnSave = findViewById(R.id.btnSave)
+        sf = getSharedPreferences("mydb", MODE_PRIVATE)
+        editor = sf.edit()
+
+//        ONCREATE ACTIVITY, Get values from sharedPreference
+        val stored_username = sf.getString("sf_username", null)
+        val stored_pswd = sf.getInt("sf_pswd", 0)
+        et_userName.setText(stored_username.toString())
+        et_pswd.setText(stored_pswd.toString())
+
+        btnSave.setOnClickListener {
+            var userName = et_userName.text.toString()
+            var pswd = et_pswd.text.toString().toInt()
+            editor.apply{
+                putString("sf_username", userName)
+                putInt("sf_pswd", pswd)
+                commit()
+            }
+            Toast.makeText(applicationContext, "USERNAME: ${userName}\nPASSWORD: ${pswd}", Toast.LENGTH_LONG).show()
+        }

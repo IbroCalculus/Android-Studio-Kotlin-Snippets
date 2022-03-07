@@ -1,0 +1,22 @@
+
+NB: Check that of Java for more, similar
+
+Create directory of type raw and place sound files inside.
+
+============= PLAY SOUND ===============
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var btn_Play: Button
+
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.sample)
+        btn_Play = findViewById(R.id.btn_Play)
+
+        btn_Play.setOnClickListener {
+            mediaPlayer.start()
+        }
+        mediaPlayer.setOnCompletionListener {
+            Toast.makeText(applicationContext, "Completed", Toast.LENGTH_LONG).show()
+        }
+
+        // mediaPlayer.isLooping = true

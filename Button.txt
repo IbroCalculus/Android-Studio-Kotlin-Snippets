@@ -1,0 +1,4 @@
+
+        btnClick.setOnClickListener {
+            d("btnLog", "You clicked the button")
+        }

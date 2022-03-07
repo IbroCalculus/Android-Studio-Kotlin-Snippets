@@ -1,0 +1,63 @@
+
+1. Place RecyclerView on layout and give ID
+2. 
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = recyclerAdapter();
+        }
+
+3. Create Kotlin class, recyclerAdapter. i.e:
+
+	class recyclerAdapter: RecyclerView.Adapter<recyclerAdapter.ViewHolder>() {
+
+	}
+4. Alt + Enter .ViewHolder. -> Create class 'ViewHolder' -> recyclerAdapter. ie:
+
+	class recyclerAdapter: RecyclerView.Adapter<recyclerAdapter.ViewHolder>() {
+    	class ViewHolder {
+
+	    }
+
+	}
+5. DO: 
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+
+6. Alt + Enter class recyclerAdapter: and implement members. ie:
+
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    }
+
+    override fun getItemCount(): Int {
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    }
+
+7. FOR THIS INSTANCE, let's specify the count statically. ie DO FROM:
+
+    override fun getItemCount(): Int {
+    }
+	TO: 
+    override fun getItemCount() = 100	//100 items in the recyclerView
+
+
+8. DO FROM: 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    }
+	TO:
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+9. IF recyler_layout not already created, Alt + Enter and create the layout
+
+10. Don't forget to change recyler_layout's parent layout(i.e contstraint) to wrap content. 
+	
+	DONE FOR BASIC!
+
+============= MORE ADVANCED =======================

@@ -1,0 +1,66 @@
+
+ViewModel class is a part of android architecture components.
+The viewmodel class is designed to store and manage UI related data in a lifecycle-conscious way.
+The ViewModel classs allows data to survive configuration changes, ie screen rotation.
+
+Android architecture components are a collection of libraries that help developers design clean, robust and maintainable applications.
+They contains classes for managing UI Components lifecycle as well as handling data persistence.
+
+When screen orientation is changed, activity reloads, hence resetting whatever was in progress.
+More like changing keyboard, language settings, enable multi-window mode etc cause this..
+
+
+
+=================== BEFORE VIEWMODEL ===============
+//Changing the orientation will reset any changes, or restart the activity, hence loosing changes.
+
+    private lateinit var tv_count: TextView;
+    private lateinit var btn_count: Button
+    var countValue = 0
+
+        tv_count = findViewById(R.id.tv_count)
+        btn_count = findViewById(R.id.btn_count)
+
+        tv_count.setText(countValue.toString())
+
+        btn_count.setOnClickListener {
+            ++countValue
+            tv_count.setText(countvalue.toString())
+        }
+
+
+================== WITH VIEWMODEL ===================
+// This solves the above problem
+
+ ----------- Create a kotlin file for the activitie's viewmodel. ie MainActivityViewModel -------------
+
+class MainActivityViewModel : ViewModel() {
+
+    var countValue = 0
+
+    fun updateCount(){
+        ++countValue
+    }
+}
+
+------------ In MainActivity.kt ------------------
+
+    private lateinit var tv_count: TextView;
+    private lateinit var btn_count: Button;
+    var countValue = 0
+
+    private lateinit var viewModel: MainActivityViewModel
+
+        setContentView(R.layout.activity_main)
+
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
+        btn_count = findViewById(R.id.btn_count)
+        tv_count = findViewById(R.id.tv_count)
+
+        tv_count.text = viewModel.countValue.toString()
+
+        btn_count.setOnClickListener {
+            viewModel.updateCount()
+            tv_count.setText(viewModel.countValue.toString())
+        }

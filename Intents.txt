@@ -1,0 +1,28 @@
+
+========================== START NEW ACTIVITY =========================
+
+            startActivity(Intent(this, MainActivity2::class.java));
+
+            val intent = Intent(this, MainActivity2::class.java);
+            startActivity(intent);
+
+            finish()     //To finish activity
+
+=================== INTENT PASSING VALUES TO ANOTHER ACTIVITY =======================
+ ----- First Activity -------
+            val textValue = et_et1.text.toString();
+
+            val intent = Intent(this, MainActivity2::class.java)
+            intent.putExtra("textValue1", textValue)
+            startActivity(intent)
+
+
+ ----- Second Activity -----
+        setContentView(R.layout.activity_main2)
+
+        val textView2: TextView = findViewById(R.id.textView2);
+
+        val textValue2 = intent.getStringExtra("textValue1")
+        textView2.text = textValue2;
+//        textView2.setText(textValue2)
+

@@ -1,0 +1,13 @@
+
+        val et_fName: EditText = findViewById(R.id.et_fName)
+            //val x: String = et_fName.text.toString()
+            val x = et_fName.text.toString()
+            tvDisplay.setText(x)
+
+            et_fName.text.clear()    //Clear text in an editText
+            if(et_FName.isEmpty())   //Checks if it is empty
+
+        var cc = et_X.text
+
+        tv_Display.text = "You typed ${cc}"
+        tv_Display.setText("You typed ${cc}")

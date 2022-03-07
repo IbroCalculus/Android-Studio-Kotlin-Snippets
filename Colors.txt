@@ -1,0 +1,8 @@
+
+            tv_Weight.setTextColor(ContextCompat.getColor(this, R.color.statusBar_color))
+
+            var hColor = 0
+            hColor = R.color.purple_700
+            tv_Height.setTextColor(ContextCompat.getColor(this, hColor))
+
+            tv_Height.setTextColor(Color.parseColor("#ff0000"))

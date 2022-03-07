@@ -1,0 +1,30 @@
+
+NB: Semicolor (;) not compulsory in Kotlin
+
+==========================  =======================
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var et_userName: EditText      // lateinit means initialization will be done later, for now, declare.
+    private lateinit var et_pswd: EditText;
+    private lateinit var button: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        button= findViewById(R.id.btnSave);
+        et_userName = findViewById(R.id.et_userName);
+        et_pswd = findViewById(R.id.et_pswd)
+
+--------------------- OR -----------------------
+        val btnClick: Button = findViewById(R.id.btnClick);
+        val tvDisplay = findViewById<TextView>(R.id.tvDisplay);
+        val et_fName: EditText = findViewById(R.id.et_fName)
+
+        btnClick.setOnClickListener {
+            Toast.makeText(this, "This is a toast message", Toast.LENGTH_LONG).show()
+           // tvDisplay.setText("You clicked on a button");
+
+            val x: String = et_fName.text.toString()
+            tvDisplay.setText(x)
+        }
