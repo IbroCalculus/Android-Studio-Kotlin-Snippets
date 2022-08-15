@@ -1,0 +1,24 @@
+
+Re-watch "Android App Development Tutorials for Begnners"
+
+    private lateinit var tv_TextView: TextView;
+    private lateinit var seekBar: SeekBar;
+
+        setContentView(R.layout.activity_main)
+
+        tv_TextView = findViewById(R.id.tv_TextView);
+        seekBar = findViewById(R.id.seekBar);
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                tv_TextView.text = "$p1";
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+            }
+
+        })
+

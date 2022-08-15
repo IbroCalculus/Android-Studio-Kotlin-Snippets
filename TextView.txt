@@ -1,0 +1,12 @@
+
+  ============= SOME PROPERTIES =========
+
+1. ------------------- ellipsize (This adds 3 dots (...) to overflow texts -----------------------
+        android:ellipsize="end"   //This add 3 dots (...) to the end overflow texts. Others are "start", "marque", "middle", "none"
+        android:lines="1"         //This implies text display must not exceed 1 line
+
+            textView.ellipsize = TextUtils.TruncateAt.END
+
+2.----------- Horizontal Scrolling Text ------------------
+Marque allows text to scroll horizontally automatically, for manual scrolling, place the textview inside
+a horizontal scrollview, then set scrollHorizontally property of the textview to true.

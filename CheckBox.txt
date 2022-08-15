@@ -1,0 +1,25 @@
+
+        val cbCheckBox1 = findViewById<CheckBox>(R.id.cbCheckBox1)
+        val btnCheck = findViewById<Button>(R.id.btnCheck)
+
+
+        cbCheckBox1.isChecked = false
+
+        cbCheckBox1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                Toast.makeText(applicationContext, "CHECK", Toast.LENGTH_LONG).show()
+            }
+            else{
+                Toast.makeText(applicationContext, "NOT CHECKED", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        btnCheck.setOnClickListener {
+            if (cbCheckBox1.isChecked){
+                Toast.makeText(applicationContext, "Check button is checked", Toast.LENGTH_LONG).show()
+            }
+            else{
+                Toast.makeText(applicationContext, "Check button is NOT checked", Toast.LENGTH_LONG).show()
+            }
+        }
+

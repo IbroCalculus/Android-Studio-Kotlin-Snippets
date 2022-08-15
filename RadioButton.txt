@@ -1,0 +1,57 @@
+
+	Place a ButtonGroup and edit orientation via XML
+	place the radio buttons within the ButtonGroup
+
+	user orientation
+        	android:orientation="horizontal" or "vertical"
+
+    private lateinit var radioGroup1: RadioGroup
+    private lateinit var rbtn1: RadioButton
+    private lateinit var rbtn2: RadioButton
+    private lateinit var rbtn3: RadioButton
+    private lateinit var btnCheck: Button
+
+        btnCheck = findViewById(R.id.btnCheck)
+        radioGroup1 = findViewById(R.id.radioGroup1)
+        rbtn1 = findViewById(R.id.rbtn1)   //Assume text=RED, BLUE and GREEN for others
+        rbtn2 = findViewById(R.id.rbtn2)
+        rbtn3 = findViewById(R.id.rbtn3)
+
+        rbtn2.isChecked = true
+============================== EITHER LIKE THIS =================================
+
+        radioGroup1.setOnCheckedChangeListener { group, checkedId ->
+            val radio = findViewById<RadioButton>(checkedId)
+            Toast.makeText(applicationContext, "Clicked on: ${radio.text}", Toast.LENGTH_LONG).show()
+        }
+
+ ---------------------------- OR using the WHEN(SWITCH) statement ----------------
+        radioGroup1.setOnCheckedChangeListener { group, checkedId ->
+            val radio = findViewById<RadioButton>(checkedId)
+            when(radio.text){
+                "RED" -> Toast.makeText(applicationContext, "Clicked on: RADIO RED", Toast.LENGTH_LONG).show()
+                "GREEN" -> Toast.makeText(applicationContext, "Clicked on: RADIO GREEN", Toast.LENGTH_LONG).show()
+                "BLUE" -> Toast.makeText(applicationContext, "Clicked on: RADIO BLUE", Toast.LENGTH_LONG).show()
+            }
+        }
+
+==================================== OR ===================================
+
+        radioGroup1.setOnCheckedChangeListener(
+            RadioGroup.OnCheckedChangeListener { group, checkedId ->
+                val radio: RadioButton = findViewById(checkedId)
+                Toast.makeText(applicationContext," On checked change : ${radio.text}",
+                    Toast.LENGTH_SHORT).show()
+            })
+
+==================================== BUTTON ONCLICK LISTENER ==============================================
+
+        btnCheck.setOnClickListener {
+            var radio_id: Int = radioGroup1.checkedRadioButtonId
+            if(radio_id != -1){ //If any radio button is selected
+                val radio = findViewById<RadioButton>(radio_id)
+                Toast.makeText(applicationContext, "You selected: " + "${radio.text}", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(applicationContext, "No radio button was selected", Toast.LENGTH_LONG).show()
+            }
+        }

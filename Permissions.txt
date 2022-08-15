@@ -1,0 +1,14 @@
+
+ There are 2 types of permission, the less sensitive and the more sensitive type.
+
+Less sensitive; E.g: Internet access, Read from external storage etc (At installation)
+More sensitive; E.g: Access device location, write to external storage etc (At runtime)
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+<!--    Location permission in the foreground, ie when app is visibly running -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+<!--    Location permisssion in the background, ie when app is minimized -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>

@@ -1,13 +1,43 @@
 
-        val et_fName: EditText = findViewById(R.id.et_fName)
-            //val x: String = et_fName.text.toString()
+// val numberEntered = etNumber1.text.toString().toInt()
+
+
+            // val et_fName: EditText = findViewById(R.id.et_fName)
+            // val x: String = et_fName.text.toString()
+
             val x = et_fName.text.toString()
-            tvDisplay.setText(x)
+            tvDisplay.text = x
+            //tvDisplay.setText(x)
+
+        tv_Display.text = "You typed ${x}"
+        // tv_Display.setText("You typed ${x}")
 
             et_fName.text.clear()    //Clear text in an editText
             if(et_FName.isEmpty())   //Checks if it is empty
 
-        var cc = et_X.text
 
-        tv_Display.text = "You typed ${cc}"
-        tv_Display.setText("You typed ${cc}")
+======================== WORKING WITH TEXT CHANGE LISTENER ==================
+
+    private lateinit var et_EditText: EditText;
+    private lateinit var tv_TextView: TextView;
+
+        setContentView(R.layout.activity_main)
+
+        et_EditText = findViewById(R.id.et_EditText);
+        tv_TextView = findViewById(R.id.tv_TextView);
+
+        et_EditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //Toast.makeText(this@MainActivity, "Clickedddd", Toast.LENGTH_SHORT).show();    //I observed either this method or below works same.
+                //tv_TextView.text = et_EditText.text.toString();
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                Toast.makeText(this@MainActivity, "Clicked", Toast.LENGTH_SHORT).show();
+                tv_TextView.text = et_EditText.text.toString();
+            }
+
+        })

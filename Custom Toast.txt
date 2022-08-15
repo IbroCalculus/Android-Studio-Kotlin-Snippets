@@ -1,0 +1,22 @@
+
+=========== CREATE A LAYOUT FOR THE CUSTOM TOAST (ie toast_layout), with height wrap_content ======================
+ - Give id to the root layout of the custom toast, ie constraintlayout -> custom_toast_root_layout
+
+=========== IN KOTLIN ===============
+
+        val btnCheck = findViewById<Button>(R.id.btnCheck)
+
+        fun showCustomToast(){
+            val customToastLayout = layoutInflater.inflate(R.layout.toast_layout, null)
+            val customToast = Toast(this)
+            customToast.view = customToastLayout
+            customToast.setGravity(Gravity.BOTTOM,0,0)
+            customToast.duration = Toast.LENGTH_LONG
+            customToast.show()
+        }
+
+        btnCheck.setOnClickListener {
+            showCustomToast()
+        }
+
+

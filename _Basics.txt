@@ -12,14 +12,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         button= findViewById(R.id.btnSave);
         et_userName = findViewById(R.id.et_userName);
         et_pswd = findViewById(R.id.et_pswd)
 
 --------------------- OR -----------------------
         val btnClick: Button = findViewById(R.id.btnClick);
+
         val tvDisplay = findViewById<TextView>(R.id.tvDisplay);
+        var buttonX = findViewById<Button>(R.id.buttonX)
+
         val et_fName: EditText = findViewById(R.id.et_fName)
+
 
         btnClick.setOnClickListener {
             Toast.makeText(this, "This is a toast message", Toast.LENGTH_LONG).show()
