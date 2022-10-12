@@ -1,0 +1,200 @@
+
+//FOR THIS METHOD, WE ARE PASSING LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW USING A DATA CLASS (More efficient method I believe)
+//CHECK RecyclerView TO GET LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW BY CREATING THE LIST WITHIN THE ADAPTER CLASS (Less efficient method I believe)
+
+
+1. ============== Place RecyclerView on layout and give ID ie recyclerView ======================
+
+2. ============== CREATE RECYCLERVIEW CUSTOM LAYOUT, ie recycler_layout (imageView1, tvText1) ==============
+   Don't forget to change recyler_layout's parent layout(i.e contstraint) to wrap content.
+
+3. ======================== In .kt =================================
+    private lateinit var recyclerView: RecyclerView
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            setHasFixedSize(true)
+        }
+-------------------------------- OR ----------------------------
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+
+4. ===== CREATE A DATA CLASS OF TYPE "Data Class" (ie RecyclerDataClass), WHICH IS SIMILAR TO MODEL CLASS IN JAVA ==========
+ ----------------- -----------------
+data class RecyclerDataClass()
+
+-----------------  ---------------
+data class RecyclerDataClass(val ImageView1M: Int, val tvTextView1M : String)
+
+
+5. =========== CREATE AN ADAPTER CLASS, ie RecyclerAdapter, AND PASS THE LIST OF DATA (ie dataList) WHICH WILL BE CREATED LATER =========================
+
+class RecyclerAdapter(private val dataList: ArrayList<RecyclerDataClass>) {
+}
+
+6. =========================== CREATE CLASS ViewHolder within RecyclerAdapter: ... =============================
+
+class ViewHolder(val view: View): RecyclerView.ViewHolder(view){
+    
+}
+
+7. ======================== WITHIN class RecyclerAdapter: ... =========================
+
+class RecyclerAdapter(private val dataList: ArrayList<RecyclerDataClass>) {
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+    }
+
+8.==================== WITHIN class ViewHolder(itemView: View)... =====================
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        
+        val imageView1 = itemView.findViewById<ImageView>(R.id.imageView1)
+        val tvText1 = itemView.findViewById<TextView>(R.id.tvText1)
+
+
+9. ======== MODIFY class RecyclerAdpater(private val dataList: ... as shown ==========================
+class RecyclerAdapter1(private val dataList: ArrayList<RecyclerDataClass>) : RecyclerView.Adapter<RecyclerAdapter1.ViewHolder>() {
+
+10. ====== ALT + ENTER RecyclerAdapter TO IMPLEMENT THE 3 MEMBER METHODS ==========
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getItemCount(): Int {
+        TODO("Not yet implemented")
+    }
+
+11. ========= WITHIN onCreateViewHolderI(parent: ... ====================
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder 
+
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+
+12. ======== WITHIN getItemCount(): Int { =====================
+    override fun getItemCount(): Int {
+        return  dataList.size
+    }
+
+13. ======= WITHIN onBindViewHolder(holder : ... =============
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val dataList1 = dataList[position]
+        holder.imageView1.setImageResource(dataList1.ImageView1M)
+        holder.tvText1.text = dataList1.tvTextView1M
+    }
+
+
+14. ========== WITHIN .kt File ===============
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var dataList: ArrayList<RecyclerDataClass>
+    private lateinit var recyclerAdapter: RecyclerAdapter
+
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            setHasFixedSize(true)
+        }
+
+        dataList = ArrayList()
+
+        dataList.add(RecyclerDataClass(R.drawable.img1, "Light Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img2, "Bold Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img1, "Light Image"))
+
+        recyclerAdapter = RecyclerAdapter1(dataList)
+        recyclerView.adapter = recyclerAdapter
+
+
+================================= ONCLICK EVENT HANDLER ========================
+Assume Activity, DetailActivity to accept details when recyclerview item clicked. ie imageView2, tvText2
+
+
+1. ============ WITHIN THE RecyclerAdapter CLASS ========================
+-------------- At the top, below class RecyclerAdapter1(private val dataList: ... ---------------
+
+    var onItemClick : ((RecyclerDataClass) -> Unit)? = null
+
+-------------- Within onBindViewHolder(holder: ViewHolder ... ----------
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val dataList1 = dataList[position]
+        holder.imageView1.setImageResource(dataList1.ImageView1M)
+        holder.tvText1.text = dataList1.tvTextView1M
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(dataList1)
+        }
+
+2. ========== WITHIN RecyclerDataClass ==================
+ Modify from :
+data class RecyclerDataClass(val ImageView1M: Int, val tvTextView1M : String)
+
+ TO:
+data class RecyclerDataClass(val ImageView1M: Int, val tvTextView1M : String) : Parcelable
+//Add Pareceble Implementation
+//ALT + ENTER parcel.readString(), Add Non-null asserted call -> parcel.readString()!!
+
+data class RecyclerDataClass(val ImageView1M: Int, val tvTextView1M : String) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString()!!
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(ImageView1M)
+        parcel.writeString(tvTextView1M)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<RecyclerDataClass> {
+        override fun createFromParcel(parcel: Parcel): RecyclerDataClass {
+            return RecyclerDataClass(parcel)
+        }
+
+        override fun newArray(size: Int): Array<RecyclerDataClass?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
+3. ========== WITHIN THE .kt FILE ==========
+
+        recyclerAdapter = RecyclerAdapter1(dataList)
+        recyclerView.adapter = recyclerAdapter1
+        
+        recyclerAdapter1.onItemClick = {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("dataList1", it)   // dataList1 from RecyclyerAdapterClass onBindViewHolder. it is constant
+            startActivity(intent)
+        }
+
+4. ========== WITHIN DetailsActivity .kt ==============
+
+    private lateinit var tvText2: TextView
+    private lateinit var imageView2: ImageView
+
+        tvText2 = findViewById(R.id.tvText2)
+        imageView2 = findViewById(R.id.imageView2)
+
+        val dataList1 = intent.getParcelableExtra<RecyclerDataClass>("dataList1")
+        if(dataList1 != null){
+            tvText2.text = dataList1.tvTextView1M
+            imageView2.setImageResource(dataList1.ImageView1M)
+        }

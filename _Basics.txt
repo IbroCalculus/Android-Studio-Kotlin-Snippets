@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        button= findViewById(R.id.btnSave);
+        button = findViewById(R.id.btnSave);
         et_userName = findViewById(R.id.et_userName);
         et_pswd = findViewById(R.id.et_pswd)
 

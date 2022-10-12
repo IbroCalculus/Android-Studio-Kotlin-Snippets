@@ -1,8 +1,11 @@
 
+
+
 Re-watch "Android App Development Tutorials for Begnners"
 
     private lateinit var tv_TextView: TextView;
     private lateinit var seekBar: SeekBar;
+    private lateinit var runnable: Runnable
 
         setContentView(R.layout.activity_main)
 
@@ -12,6 +15,7 @@ Re-watch "Android App Development Tutorials for Begnners"
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 tv_TextView.text = "$p1";
+                if(p2) mediaPlayer?.seekTo(p1)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -22,3 +26,6 @@ Re-watch "Android App Development Tutorials for Begnners"
 
         })
 
+
+        seekBarTip.min = 1
+        seekBarTip.max = 50

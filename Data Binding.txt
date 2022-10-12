@@ -1,0 +1,93 @@
+
+ - Data Binding Library is used to bind data and User Interface (UI). In other words, it is used to connect UI components with Data Source.
+ - It uses Declarative Method instead of Programmatic Method.
+ - No findViewById codes required to work with this.
+ - It prevents the Null Pointer Exception Problem.
+
+
+======= IN build.gradle (Module) =======
+NOTE: Use internet
+
+android {
+    compileSdk 32
+
+    buildFeatures{
+        dataBinding true
+    }
+
+========= CODE ============
+Assume 3 components, ie tvDisp, etMessage, btnCheck
+
+===== IN XML =======
+ // Place the root layout within the <layout></layout> tag
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <Button
+            android:id="@+id/btnClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etMessage" />
+
+        <TextView
+            android:id="@+id/tvDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Enter message..."
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDisplay" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
+
+=========== IN KOTLIN =========
+
+// ------ Create databinding object (ie binding). If activity name is activity_second, -> ... binding : ActivitySecondBinding
+    private lateinit var binding : ActivityMainBinding    
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)   // Replacing setContentView(R.layout.activity_main)
+
+        binding.btnClick.setOnClickListener {   // Assume id=btn_show_info, -> binding.btnShowInfo.setOnClickListener {...
+
+            binding.tvDisplay.text = "You typed: ${binding.etMessage.text.toString()}"   
+        }
+
+                              //------------- OR use the kotlin scoping function to avoid repeating binding. ----------
+         
+        binding.btnClick.setOnClickListener {
+            binding.apply {
+                tvDisplay.text = "You entered the text ->: ${etMessage.text.toString()}"
+            }
+        }
+

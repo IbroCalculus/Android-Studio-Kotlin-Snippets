@@ -11,7 +11,7 @@ More like changing keyboard, language settings, enable multi-window mode etc cau
 
 
 
-=================== BEFORE VIEWMODEL ===============
+=================== BEFORE ViewModel ===============
 //Changing the orientation will reset any changes, or restart the activity, hence loosing changes.
 
     private lateinit var tv_count: TextView;
@@ -29,7 +29,7 @@ More like changing keyboard, language settings, enable multi-window mode etc cau
         }
 
 
-================== WITH VIEWMODEL ===================
+================== WITH ViewModel ===================
 // This solves the above problem
 
  ----------- Create a kotlin file for the activitie's viewmodel. ie MainActivityViewModel -------------
@@ -53,14 +53,65 @@ class MainActivityViewModel : ViewModel() {
 
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-
         btn_count = findViewById(R.id.btn_count)
         tv_count = findViewById(R.id.tv_count)
 
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         tv_count.text = viewModel.countValue.toString()
 
         btn_count.setOnClickListener {
             viewModel.updateCount()
             tv_count.setText(viewModel.countValue.toString())
+        }
+
+
+
+================================ LiveData ===================================
+
+LiveData is lifecycle-aware observable data holder. As its name suggests, it is used to get live data, real-time updates from the data sources.
+
+Using the code from the ViewModel sample above;
+Modify the code for the textview (tv_count) to automatically update it's display value using LiveData.
+Modify the ViewModel class, as well as the .kt file as shown to work with LiveData, without including the // lines
+
+ ----------- Create a kotlin file for the activitie's viewmodel. ie MainActivityViewModel -------------
+
+class MainActivityViewModel : ViewModel() {
+//    var count = 0
+    var count = MutableLiveData<Int>()
+
+    init {
+        count.value = 0
+    }
+
+    fun incrementCount(){
+//        ++count
+        count.value = (count.value)?.plus(1)
+    }
+}
+
+------------ In MainActivity.kt ------------------
+
+    private lateinit var tv_count: TextView;
+    private lateinit var btn_count: Button;
+    var countValue = 0
+
+    private lateinit var viewModel: MainActivityViewModel
+
+        setContentView(R.layout.activity_main)
+
+        var tvCount = findViewById<TextView>(R.id.tvCount)
+        var btnCount = findViewById<Button>(R.id.btnCount)
+
+        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+//        tvCount.text = viewModel.count.toString()
+        
+        viewModel.count.observe(this, Observer {
+            tvCount.text = it.toString()
+        })
+
+        btnCount.setOnClickListener {
+//            tvCount.setText("${count++}")
+            viewModel.incrementCount()
+//            tvCount.text = viewModel.count.toString()
         }

@@ -12,9 +12,11 @@
         tv_Display.text = "You typed ${x}"
         // tv_Display.setText("You typed ${x}")
 
-            et_fName.text.clear()    //Clear text in an editText
-            if(et_FName.isEmpty())   //Checks if it is empty
+            et_fName.text.clear()                             //Clear text in an editText
+            if(et_FName.isEmpty())                            //Checks if it is empty
+            if(TextUtils.isEmpty(et_FName.text.toString()))   //Checks if it is empty
 
+            etHeight.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)          //Set text size
 
 ======================== WORKING WITH TEXT CHANGE LISTENER ==================
 

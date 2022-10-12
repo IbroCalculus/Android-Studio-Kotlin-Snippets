@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         et_userName = findViewById(R.id.et_userName)
         et_pswd = findViewById(R.id.et_pswd)
         btnSave = findViewById(R.id.btnSave)
+
         sf = getSharedPreferences("mydb", MODE_PRIVATE)
         editor = sf.edit()
 

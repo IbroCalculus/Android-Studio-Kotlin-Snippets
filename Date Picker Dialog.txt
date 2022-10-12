@@ -1,0 +1,21 @@
+
+month counts from zero (0). ie December is 11, hence, ${month + 1}
+
+    private fun showDatePickerDialog() {
+        val calendarObj = Calendar.getInstance()
+        val year1 = calendarObj.get(Calendar.YEAR)  //Get device's current year
+        val month1 = calendarObj.get(Calendar.MONTH)
+        val day1 = calendarObj.get(Calendar.DAY_OF_MONTH)
+        
+        val datepickerdialog = DatePickerDialog(this,
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val dispMsg = "$dayOfMonth/${month+1}/$year"
+                Toast.makeText(this, dispMsg, Toast.LENGTH_LONG).show()
+        },
+            year1,
+            month1,
+            day1
+        )
+        datepickerdialog.datePicker.maxDate = System.currentTimeMillis() //disable selecting future date
+        datepickerdialog.show()
+    }
