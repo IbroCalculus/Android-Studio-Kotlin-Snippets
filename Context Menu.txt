@@ -1,0 +1,38 @@
+ Similar to PopUp menu.
+ Floating context menu, you long click, while popup menu, you click to pop up a menu.
+
+NOTE ALSO; Contextual Menu
+
+NB: Floating context menu works by LONG-CLICKING on the widget
+    Displays menu item on a pop-up
+
+CREATE MENU RESOURCE (context_menu) WITH MENU ITEMS.
+This should contain just 2 properties; id and title. Does not display icons
+
+
+---------------- .kt --------------------
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val btn1 = findViewById<Button>(R.id.btn1)
+        registerForContextMenu(btn1)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.floating_context_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.item1 -> Toast.makeText(this, "item1 selected", Toast.LENGTH_LONG).show()
+            R.id.item1 -> Toast.makeText(this, "item2 selected", Toast.LENGTH_LONG).show()
+            R.id.item1 -> Toast.makeText(this, "item3 selected", Toast.LENGTH_LONG).show()
+        }
+        return super.onContextItemSelected(item)
+    }

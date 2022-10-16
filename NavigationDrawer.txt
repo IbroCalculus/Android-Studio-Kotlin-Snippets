@@ -1,0 +1,103 @@
+
+- Root layout must be drawerLayout (present in xml code, not in xml design) with id, ie drawerLayout
+
+- Then place any required layout within the drawerLayout, ie constraintLayout, match parents width and height
+
+- Add NavigationView within the drawerLayout with id, ie nav_view. ie
+NB: THE nav_view MUST BE PLACED BELOW THE CONSTRAINT LAYOUT (or any layout developer decides to work with).
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"/>
+
+- Create a layout resource file for the navigationDrawer header section, ie nav_header (We will be dividing into top and down section)
+
+- Create the resource file that will lie below the navigation header section. ie nav_drawer_menu
+
+NB: To be able to preview how the menu items will look in the navigation drawer, add these 2 lines of code within the menu;
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    
+    xmlns:tools="http://schemas.android.com/tools"   // THIS
+    tools:showIn="navigation_view"                   // AND THIS
+    >
+
+    <item
+        android:id="@+id/nav_setting"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Setting" />
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile" >
+        <menu >
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="Login" />
+        </menu>
+    </item>
+
+
+--------------- .xml --------------
+
+- Within nav_view;
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:headerLayout="@layout/nav_header"   // THIS
+        app:menu="@menu/nav_drawer_menu"        // AND THIS
+
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"/>
+
+
+--------------------------------------------
+- Create 2 string resources, ie: open and close
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+-------------- .kt ---------------
+
+    lateinit var toggle: ActionBarDrawerToggles
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val nav_view = findViewById<NavigationView>(R.id.nav_view)
+
+
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        nav_view.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_home -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_message -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_sync -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_trash -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_setting -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_login -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_share -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+                R.id.nav_rate_us -> Toast.makeText(applicationContext, "Home clicked", Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }

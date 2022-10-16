@@ -1,0 +1,3 @@
+
+LiveData is an observable data holder.
+It handles update to data being passed to it, hence, anything observing the LiveData will get dynamic updates.

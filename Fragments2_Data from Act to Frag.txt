@@ -1,0 +1,70 @@
+
+====================== SENDING DATA FROM ACTIVITY TO FRAGMENT =========================
+
+- In activity, assuming EditText (et_Name), and Button (btn_Send2Frag1), and an image resource as R.drawable.img1
+
+- Create a fragment, ie Frag1
+
+- Delete unncessary codes from Frag1.kt except;
+
+
+class Frag1 : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_frag1, container, false)
+    }
+}
+
+
+- In frag1.xml, Assume a TextView (tv_DispFromActivity) and an imageView (frag1_img1)
+
+- In main.xml, place FragmentContainerView (fragmentContainerView1)
+
+
+============ Main .kt ================
+
+        val containerView1 = findViewById<FragmentContainerView>(R.id.fragmentContainerView1) //NOT NECESSARY
+
+        val et_Name = findViewById<EditText>(R.id.et_Name)
+        val btn_Send2Frag1 = findViewById<Button>(R.id.btn_Send2Frag1)
+
+        btn_Send2Frag1.setOnClickListener {
+            val frag1 = Frag1()
+            val bundle = Bundle()
+            bundle.putString("et_NameS", et_Name.text.toString())
+            bundle.putInt("image", R.drawable.img1)
+            frag1.arguments = bundle
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainerView1, frag1)
+                commit()
+
+            }
+        }
+    }
+
+================ IN Frag1.kt ==============
+
+class Frag1 : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        
+        val view: View = inflater.inflate(R.layout.fragment_frag1, container, false)
+
+        val tv_DispFromActivity = view.findViewById<TextView>(R.id.tv_DispFromActivity)
+        val frag1_img1 = view.findViewById<ImageView>(R.id.frag1_img1)
+
+        val bundle = arguments
+        val et_NameS = bundle?.getString("et_NameS")
+        val image = bundle?.getInt("image")
+        tv_DispFromActivity.text = et_NameS
+        image?.let { frag1_img1.setImageResource(it) }
+        return view
+    }
+}

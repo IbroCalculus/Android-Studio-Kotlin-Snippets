@@ -1,0 +1,52 @@
+
+- Create fragments. i.e; FirstFragment, SecondFragment, ThirdFragment. Delete unnecessary codes from the .kt of each fragments created.
+
+class FirstFragment : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_first, container, false)
+    }
+}
+
+
+- Create main activity to place fragment on fragmentContainerView (ie id fragmentContainerView1)
+- Create fragments event handlers; buttons, tabs, viewPager etc. i.e btn_Frag1, btn_Frag2, btn_Frag3, TabItem1, TabItem2, TabItem3 in .kt
+
+
+--------------- .kt -----------------------
+
+        val containerView1 = findViewById<FragmentContainerView>(R.id.fragmentContainerView1) //NOT NECESSARY
+
+        val btn1 = findViewById<Button>(R.id.btn1)
+        val btn2 = findViewById<Button>(R.id.btn2)
+        val btn3 = findViewById<Button>(R.id.btn3)
+
+        val firstFragment = FirstFragment()
+        val secondFragment = SecondFragment()
+        val thirdFragment = ThirdFragment()
+
+        btn1.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainerView1, firstFragment)
+                addToBackStack(null) //OPTIONAL, only if want it added to backstack
+                commit()
+            }
+        }
+
+        btn2.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainerView1, secondFragment)
+                commit()
+            }
+        }
+        btn3.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainerView1, thirdFragment)
+                commit()
+            }
+        }
+
