@@ -1,3 +1,5 @@
+Store and retrieve data as key-value pair
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         et_pswd = findViewById(R.id.et_pswd)
         btnSave = findViewById(R.id.btnSave)
 
-        sf = getSharedPreferences("mydb", MODE_PRIVATE)
+        sf = getSharedPreferences("mydb1", MODE_PRIVATE)
         editor = sf.edit()
 
 //        ONCREATE ACTIVITY, Get values from sharedPreference
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             editor.apply{
                 putString("sf_username", userName)
                 putInt("sf_pswd", pswd)
-                commit()
+                apply()    //OR commit()
             }
             Toast.makeText(applicationContext, "USERNAME: ${userName}\nPASSWORD: ${pswd}", Toast.LENGTH_LONG).show()
         }

@@ -94,7 +94,7 @@ class MainActivityViewModel : ViewModel() {
 
     private lateinit var tv_count: TextView;
     private lateinit var btn_count: Button;
-    var countValue = 0
+    var count = 0
 
     private lateinit var viewModel: MainActivityViewModel
 

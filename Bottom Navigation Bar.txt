@@ -1,0 +1,51 @@
+
+
+Create menu resource file with menu items and IDs. i.e bottom_nav_menu
+Also, add icons to each of the menu items
+
+XML
+ <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="#fff"
+        app:itemIconTint="#fff"
+        android:foregroundTint="#ff0000"
+        android:background="#654321"
+        />
+
+------------------ .kt -------------------------
+
+        val bottom_nav_menu : BottomNavigationView = findViewById(R.id.bottom_nav_menu)
+        bottom_nav_menu.selectedItemId = R.id.item3   // OPTIONAL
+
+        bottom_nav_menu.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.item1 -> Toast.makeText(this, "Item 1 Clicked", Toast.LENGTH_SHORT).show()
+                R.id.item2 -> Toast.makeText(this, "Item 1 Clicked", Toast.LENGTH_SHORT).show()
+                R.id.item3 -> Toast.makeText(this, "Item 1 Clicked", Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
+
+
+----------- TO CHANGE THE ACTIVE ITEM INDICATOR STYLE ----------
+
+ - Go to themes, create a new style below the existing style as shown
+
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#123456</item>
+    </style>
+
+- In .xml;
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:itemTextAppearanceActive="@style/App.Custom.Indicator"
+
+        app:itemTextColor="#fff"  // for itemTextAppearanceActive to work, delete this line of code

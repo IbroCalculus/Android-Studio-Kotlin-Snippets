@@ -1,0 +1,22 @@
+
+Assuming we want to autocomplete countries as we type in this reference;
+
+Create a string array with the list of countries. (CHECK: List of Countries.txt) ie;
+  
+    <string-array name="countries_array">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+         .
+         .
+         .
+    </string-array>
+
+
+Place AutocompleTextView view of id autoCompleteTextView
+
+
+        android:completionThreshold="1"           // No of characters to type before list comes up
+        autoCompleteTextView.threshold = 1        // In Kotlin
+
+

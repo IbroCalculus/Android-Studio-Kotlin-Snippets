@@ -1,0 +1,89 @@
+
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+
+
+- Create second activity, ie ie Main2Activity, which will open oncde authentication successful.
+
+------ First Activity (ie MainActivity) ------
+
+
+class MainActivity : AppCompatActivity() {
+
+
+
+    private var cancellationSignal : CancellationSignal? = null
+    private val authenticationCallback : BiometricPrompt.AuthenticationCallback
+    get() =
+        @RequiresApi(Build.VERSION_CODES.P)
+        object : BiometricPrompt.AuthenticationCallback(){
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                super.onAuthenticationError(errorCode, errString)
+                notifyUser("Authentication error : $errString")
+            }
+
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                super.onAuthenticationSucceeded(result)
+                notifyUser("Authentication Successful!")
+                startActivity(Intent(this@MainActivity, MainActivity2::class.java))
+            }
+        }
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
+-----------------------------------------------------
+
+NB: SET .setNegativeButton(" ", this.mainExecutor ...  TO DO AWAY WITH DUPLICATE Cancel buttons on dialog pop up.
+    ALSO, remove the notifyUser("Authentication cancelled")
+
+        setContentView(R.layout.activity_main)
+
+        checkBiometricSupport()
+        val btnAuthenticate : Button = findViewById(R.id.btnAuthenticate)
+        btnAuthenticate.setOnClickListener {
+            val biometricPrompt = BiometricPrompt.Builder(this)
+                .setTitle("Title of Biometric Prompt")
+                .setSubtitle("Authentication is required")
+                .setDescription("This app uses fingerprint authentication")
+                .setNegativeButton("Cancel", this.mainExecutor, DialogInterface.OnClickListener { dialog, which ->
+                    notifyUser("Authentication Cancelled")
+                }).build()
+
+            biometricPrompt.authenticate(getCancellationSignal(), mainExecutor, authenticationCallback)
+        }
+
+    }
+
+
+---------------------------------------------------
+
+    private fun notifyUser(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getCancellationSignal(): CancellationSignal{
+        cancellationSignal = CancellationSignal()
+        cancellationSignal?.setOnCancelListener {
+            notifyUser("Authentication was cancelled by user")
+        }
+        return cancellationSignal as CancellationSignal
+    }
+
+    private fun checkBiometricSupport() : Boolean {
+        val keyguardManager : KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if(!keyguardManager.isKeyguardSecure){
+            notifyUser("Fingerprint authentication has not been enabled in settings")
+            return false
+        }
+
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED){
+            notifyUser("Fingerprint authentication permission is not granted!")
+            return false
+        }
+        return  if(packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)){
+            true
+        } else true
+    }

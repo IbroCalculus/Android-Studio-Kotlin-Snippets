@@ -1,0 +1,16 @@
+
+IT WILL OPEN VIA DEFAULT WEB BROSER
+
+=== WITHIN strings.xml ================ 
+    <string name="myHyperlink"> Go to <a href="http://www.google.com">Google</a> by clicking on it.</string>
+
+
+
+=== WITHING TEXTVIEW IN .xml, REFERENCE "myHyperlink" ==========
+        android:id="@+id/tv_Display"
+        android:text="@string/myHyperlink"
+
+
+======== IN .kt =========
+        val tv_Display : TextView = findViewById(R.id.tv_Display)
+        tv_Display.movementMethod = LinkMovementMethod.getInstance()
