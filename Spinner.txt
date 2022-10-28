@@ -1,0 +1,72 @@
+2 Methods:
+=========== METHOD 1 (STATIC VALUES )  ==============
+
+Create a string-array resource
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+    </string-array>
+
+------ XML -------
+
+        android:id="@+id/spinner1"
+        android:entries="@array/months"
+
+
+------ .kt --------------
+    lateinit var spinner1 : Spinner
+
+        spinner1 = findViewById(R.id.spinner1)
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
+        }
+    -----------Implement the 2 methods -------------
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+ ------------------------
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val msg = "Clicked: ${parent?.getItemAtPosition(position)} @ position ${position}"
+                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+
+
+
+=========== METHOD 2 (DYNAMIC VALUES/ VALUES AT RUN TIME )  ==============
+
+        spinner1 = findViewById(R.id.spinner1)
+
+        val customList = listOf("One", "Two", "Three", "Four")
+        val adapter1 = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, customList)
+        spinner1.adapter = adapter1
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val msg = "Clicked: ${parent?.getItemAtPosition(position)} @ position ${position}"
+                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+
+
+
+
+
+

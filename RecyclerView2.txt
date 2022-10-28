@@ -3,6 +3,10 @@
 //CHECK RecyclerView TO GET LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW BY CREATING THE LIST WITHIN THE ADAPTER CLASS (Less efficient method I believe)
 
 
+- LayoutManager is responsible for putting the views on the screen
+- ViewHolder
+
+
 1. ============== Place RecyclerView on layout and give ID ie recyclerView ======================
 
 2. ============== CREATE RECYCLERVIEW CUSTOM LAYOUT, ie recycler_layout (imageView1, tvText1) ==============

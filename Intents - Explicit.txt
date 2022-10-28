@@ -9,6 +9,12 @@
 
             finish()     //To finish activity
 
+
+            Intent(this, MainActivity2::class.java).also {
+                startActivity(it)
+                finish()
+            }
+
 =================== INTENT PASSING VALUES TO ANOTHER ACTIVITY =======================
  ----- First Activity -------
             val textValue = et_et1.text.toString();
@@ -16,6 +22,15 @@
             val intent = Intent(this, MainActivity2::class.java)
             intent.putExtra("textValue1", textValue)
             startActivity(intent)
+
+
+            Intent(this, MainActivity2::class.java).also {
+                val et_fNameText = et_fName.text.toString()
+                it.putExtra("fName", et_fNameText )
+                startActivity(it)
+            }
+
+
 
 
  ----- Second Activity -----

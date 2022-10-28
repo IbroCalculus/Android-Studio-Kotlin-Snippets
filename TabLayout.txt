@@ -1,0 +1,61 @@
+1 ============ TABLAYOUT WITH FRAGMENT (Switching between fragments using tablayout =============
+
+  - Create fragments, ie MondayFragment, TuesdayFragment, WednesdayFragment -
+
+  --- In main xml ---
+
+  - Add tablayout, within it add tabItems, ie tabItem_Monday, tabItem_Tuesday, tabItem_Wednesday
+  - Add fragment containerView, ie fragmentContainerView1
+
+---- in .kt ----------
+
+    lateinit var tabLayout : TabLayout
+    lateinit var fragmentContainerView1 : FragmentContainerView
+
+
+        tabLayout = findViewById(R.id.tabLayout)
+        fragmentContainerView1 = findViewById(R.id.fragmentContainerView1)
+
+
+        val mondayFragment = MondayFragment()
+        val tuesdayFragment = TuesdayFragment()
+        val wednesdayFragment = WednesdayFragment()
+
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab!!.position){
+                    0 -> {
+                        supportFragmentManager.beginTransaction().apply {
+                            replace(R.id.fragmentContainerView1, mondayFragment)
+                            addToBackStack(null) //OPTIONAL, only if want it added to backstack
+                            commit()
+                        }
+
+                }
+                    1 -> {
+                        supportFragmentManager.beginTransaction().apply {
+                            replace(R.id.fragmentContainerView1, tuesdayFragment)
+                            addToBackStack(null) //OPTIONAL, only if want it added to backstack
+                            commit()
+                        }
+                    }
+
+
+                    2 -> {
+                        supportFragmentManager.beginTransaction().apply {
+                            replace(R.id.fragmentContainerView1, wednesdayFragment)
+                            addToBackStack(null) //OPTIONAL, only if want it added to backstack
+                            commit()
+                        }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })

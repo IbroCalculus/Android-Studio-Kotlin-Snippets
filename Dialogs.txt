@@ -1,0 +1,64 @@
+========= 3 Different kinds of dialog =========
+
+
+---------------- 1. Simple Yes -r No Dialog -----------------
+
+    private fun showAlert() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Exit Application")
+            .setMessage("Sure to exit from app?")
+            .setIcon(R.drawable.icon1)
+            .setPositiveButton("Yes"){ dialogInterface, i ->
+                Toast.makeText(this, "Yes button clicked", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No"){ dialogInterface, i ->
+                Toast.makeText(this, "No button clicked", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
+    }
+
+
+-------------- 2. Single choice Dialog -------------
+
+    private fun showAlert2() {
+        val options = arrayOf("One", "Two", "Three", "Four")
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Pick a choice")
+            .setSingleChoiceItems(options, 0, ){dialogInterface, i ->
+                Toast.makeText(this, "You clicked ${options[i]}", Toast.LENGTH_SHORT).show()
+            }
+            .setPositiveButton("Accept"){ dialogInterface, i ->
+                Toast.makeText(this, "Selection Accepted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Decline"){ dialogInterface, i ->
+                Toast.makeText(this, "Selection Declined", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
+    }
+
+
+------------- 3. Multi Choice Dialog -------------
+
+    private fun showAlert3(){
+        val options = arrayOf("One", "Two", "Three", "Four")
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Pick a choice")
+            .setMultiChoiceItems(options, booleanArrayOf(true, false, false, false)){dialogInterface, i, isChecked ->
+                if(isChecked) {
+                    Toast.makeText(this, "You checked ${options[i]}", Toast.LENGTH_SHORT).show()
+                } else{
+                    Toast.makeText(this, "You Unchecked ${options[i]}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setPositiveButton("Accept"){ dialogInterface, i ->
+                Toast.makeText(this, "Selection Accepted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Decline"){ dialogInterface, i ->
+                Toast.makeText(this, "Selection Declined", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
+    }
+

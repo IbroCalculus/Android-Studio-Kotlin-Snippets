@@ -12,3 +12,63 @@ More sensitive; E.g: Access device location, write to external storage etc (At r
 
 <!--    Location permisssion in the background, ie when app is minimized -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+
+================== ENABLE RUN TIME PERMISSION =================
+----- In Manifest -----
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+----- In XML -------- 
+
+       assume two buttons ie btnStorage and btnCamera.
+
+---- In .kt -------
+
+    val CAMERA_PER = 100
+    val STORAGE_PER = 200
+
+        setContentView(R.layout.activity_main)
+
+        val btnStorage = findViewById<Button>(R.id.btnStorage)
+        val btnCamera : Button = findViewById(R.id.btnCamera)
+
+        btnStorage.setOnClickListener {
+            checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PER)
+        }
+
+        btnCamera.setOnClickListener {
+            checkPermission(Manifest.permission.CAMERA, CAMERA_PER)
+        }
+
+
+
+    private fun checkPermission(permission: String, requestCode : Int){
+        if(ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+        }else{
+            Toast.makeText(this,"Permission already granted", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == CAMERA_PER){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Camera permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+        else if(requestCode == STORAGE_PER){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "Storage permission granted", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Storage permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    } 

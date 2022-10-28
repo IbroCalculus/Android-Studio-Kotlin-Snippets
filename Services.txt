@@ -1,0 +1,12 @@
+- A service is a component that operates in the background without requiring direct user input.
+
+- Services are used for processes that are repeated and may take a long time to complete.
+
+- Services have a greater priority than idle or invisble activity.
+
+
+
+========== Typeos of Android Services ===========
+1. Foreground Services
+2. Background Services
+3. Bound Services

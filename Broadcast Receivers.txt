@@ -1,0 +1,63 @@
+
+Types of broadcast receivers
+
+1. Static: Declared in the manifest file, and works even if the app is closed
+
+2. Dynamic: Works only if the app is active or minimized.
+
+From api 26+, most broadcast receivers are dynamic
+
+
+-------- STEPS -------------
+- Create the Broadcast Receiver
+- Registering the broadcast receiver
+
+
+================= E.g When Airplane Mode Changed =================
+
+----- Create a class for the broadcast receiver, ie AirplaneModeChangeReceiver, extend BroadCastReceiver ----
+
+class AirplaneModeChangeReceiver : BroadcastReceiver() {
+    
+}
+
+----- Implement method -------
+
+class AirplaneModeChangeReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        
+    }
+
+
+----------  ---------------------
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val isAirplaneModeEnabled = intent?.getBooleanExtra("state", false) ?: return
+
+        if(isAirplaneModeEnabled){
+            Toast.makeText(context, "Airplane mode has bee enabled", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context, "Airplane mode disabled", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+-------------- Main.kt ------------
+
+    lateinit var receiver: AirplaneModeChangeReceiver
+
+
+        setContentView(R.layout.activity_main)
+
+        receiver = AirplaneModeChangeReceiver()
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(receiver, it)
+        }
+
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
+    }

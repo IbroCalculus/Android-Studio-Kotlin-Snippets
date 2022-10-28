@@ -1,0 +1,8 @@
+
+    lateinit var viewPager1 : ViewPager2
+
+        viewPager1 = findViewById(R.id.viewPager1)
+
+
+- Create layout resource file, ie viewpager_layout. width and height must be match parents.
+- Add necessary views ie imageView1 and tvTitle

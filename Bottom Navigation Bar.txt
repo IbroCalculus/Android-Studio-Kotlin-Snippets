@@ -33,6 +33,13 @@ XML
             true
         }
 
+-------- To add Badge on Menu Item (ie number of messages on the message icon) ----------------
+
+        bottom_nav.getOrCreateBadge(R.id.message).apply {
+            number = 12
+            isVisible = true
+        }
+
 
 ----------- TO CHANGE THE ACTIVE ITEM INDICATOR STYLE ----------
 

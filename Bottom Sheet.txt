@@ -1,0 +1,36 @@
+Create xml layout file that will pop up as bottom sheet. in this reference, ie dialog_one
+
+- Assume dialog_one has views with ids; item1, item2 and btnDismissDialog
+
+--- IN MAIN .kt ----
+
+        val btnShow : Button = findViewById(R.id.btnShow)
+        btnShow.setOnClickListener {
+            showDialogOne()
+        }
+
+
+    private fun showDialogOne() {
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(R.layout.dialog_one)
+
+        val item1 : TextView? = dialog.findViewById(R.id.Item1)
+        val item2 = dialog.findViewById<TextView>(R.id.item2)
+        val btnDismissDialog : Button? = dialog.findViewById(R.id.btnDismissDialog)
+
+        item1?.setOnClickListener{
+            Toast.makeText(this, "Items 1 clicked on bottomsheet", Toast.LENGTH_SHORT).show()
+        }
+
+        item2?.setOnClickListener{
+            Toast.makeText(this, "Items 2 clicked on bottomsheet", Toast.LENGTH_SHORT).show()
+        }
+
+        btnDismissDialog?.setOnClickListener{
+            dialog.dismiss()    // Dismisses the bottomsheet dialog
+            Toast.makeText(this, "Bottom sheet dialog dismissed", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.setCancelable(false)  //If false, can't close bottomsheet on click anywhere.  Else, true or do not declare this line
+        dialog.show()
+    }

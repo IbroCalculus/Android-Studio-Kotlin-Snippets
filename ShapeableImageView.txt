@@ -1,0 +1,42 @@
+Shape can be; Circular, rounded square, corner cut and other customizable shapes.
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/img1" />
+
+
+- Create a custom style of resource type Values, ie custom_style.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="style_circular">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="style_roundedSquare">
+        <item name="cornerSize">40%</item>
+    </style>
+
+    <style name="style_cornerCut">
+        <item name="cornerSize">30dp</item>
+        <item name="cornerFamily">cut</item>
+    </style>
+    
+    <style name="style_specificCornerCut">
+        <item name="cornerSizeTopRight">20%</item>
+        <item name="cornerFamilyTopRight">cut</item>
+        
+        <item name="cornerSizeBottomLeft">20%</item>
+        <item name="cornerFamilyBottomLeft">cut</item>
+    </style>
+
+</resources>
+
+
+---- ShapeableImageView XML ----
+
+        app:shapeAppearanceOverlay="@style/style_circular"
+        app:strokeWidth="15dp" //
+        app:strokeColor="#f00" //

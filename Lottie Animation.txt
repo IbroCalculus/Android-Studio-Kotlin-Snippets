@@ -1,0 +1,44 @@
+lottiefiles.com -> Discover -> Free to use animations -> Download the lottie json
+
+  implementation 'com.airbnb.android:lottie:$lottieVersion'
+  implementation 'com.airbnb.android:lottie:5.2.0'
+
+
+- Create a new resource directory of type raw, place lottie json file within, ie pushup.json
+ NB: Rename the .json to all small letters with no space nor dashes
+
+
+
+------ IN XML -----------
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ltAnimation1"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCamera"
+
+        app:lottie_rawRes="@raw/pushup"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        />
+
+
+NB: THE ABOVE IS ENOUGH TO RUN
+
+
+--------- IN .kt --------
+
+        val btnOne = findViewById<Button>(R.id.btnOne)
+        val btnTwo : Button = findViewById(R.id.btnTwo)
+        val ltAnimation1 : LottieAnimationView = findViewById(R.id.ltAnimation1)
+
+        btnOne.setOnClickListener {
+            ltAnimation1.playAnimation()
+        }
+        btnTwo.setOnClickListener {
+            ltAnimation1.pauseAnimation()
+        }
