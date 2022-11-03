@@ -1,0 +1,13 @@
+Model - View - ViewModel
+
+- Model contains data and business logic
+
+- View is the display layer, it is composed of the activities, fragments, layouts etc
+
+- ViewModel manages lifecycle, connects the other two components, it sits between the View and the Model. It provides lifecycle management and data availability.
+It takes data from the Model and allows the View to display the data
+
+ --- LiveData (MutableLiveData) - implements the observable pattern that is used in the mvvm architecture.
+
+
+

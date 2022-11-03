@@ -1,0 +1,9 @@
+
+        val ratingBar = findViewById<RatingBar>(R.id.ratingBar)
+        ratingBar.rating = 2F
+        ratingBar.stepSize = 1F
+        ratingBar.numStars = 5
+        
+        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            Toast.makeText(this, "Rating: $rating", Toast.LENGTH_SHORT).show()
+        }

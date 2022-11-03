@@ -59,3 +59,61 @@
             }
 
         })
+
+
+
+2 ============== TABLAYOUT WITH VIEWPAGER2 =================
+
+  - Create fragments, ie MondayFragment, TuesdayFragment, WednesdayFragment -
+
+  --- In main xml ---
+
+  - Add tablayout (ie tabLayout), within it add tabItems, ie tabItem_Monday, tabItem_Tuesday, tabItem_Wednesday
+  - Add ViewPager2, ie viewPager
+
+
+--- Create an adapter, ie PagerAdapter;
+
+class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+}
+
+   - Implement the 2 members ------- 
+
+class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+    override fun getItemCount(): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        TODO("Not yet implemented")
+    }
+
+   - Modify as shown, 3 fragments in this reference -----
+
+    override fun getItemCount() = 3
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position){
+            0 -> {MondayFragment()}
+            1 -> {TuesdayFragment()}
+            2 -> {WednesdayFragment()}
+            else -> {throw Resources.NotFoundException("Position not found!")}
+        }
+    }
+
+
+---- main .kt -----
+
+        viewPager = findViewById(R.id.viewPager)
+        tabLayout = findViewById(R.id.tabLayout)
+
+        viewPager.adapter = PagerAdapter(this)
+
+        TabLayoutMediator(tabLayout,viewPager){ tab, index ->
+        tab.text = when(index){
+            0 -> {"Monday"}
+            1 -> {"Tuesday"}
+            2 -> {"Wednesday"}
+            else -> {throw Resources.NotFoundException("Position not found")}
+        }
+        }.attach()
