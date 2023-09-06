@@ -23,6 +23,7 @@
         radioGroup1.setOnCheckedChangeListener { group, checkedId ->
             val radio = findViewById<RadioButton>(checkedId)
             Toast.makeText(applicationContext, "Clicked on: ${radio.text}", Toast.LENGTH_LONG).show()
+	    when(radio.checkId){
         }
 
  ---------------------------- OR using the WHEN(SWITCH) statement ----------------
@@ -32,6 +33,12 @@
                 "RED" -> Toast.makeText(applicationContext, "Clicked on: RADIO RED", Toast.LENGTH_LONG).show()
                 "GREEN" -> Toast.makeText(applicationContext, "Clicked on: RADIO GREEN", Toast.LENGTH_LONG).show()
                 "BLUE" -> Toast.makeText(applicationContext, "Clicked on: RADIO BLUE", Toast.LENGTH_LONG).show()
+            } 
+			------	OR -----
+            when(radio.checkedId){
+                R.id.rbtn1 -> Toast.makeText(applicationContext, "Clicked on: RADIO RED", Toast.LENGTH_LONG).show()
+                R.id.rbtn2 -> Toast.makeText(applicationContext, "Clicked on: RADIO GREEN", Toast.LENGTH_LONG).show()
+                R.id.rbtn3 -> Toast.makeText(applicationContext, "Clicked on: RADIO BLUE", Toast.LENGTH_LONG).show()
             }
         }
 

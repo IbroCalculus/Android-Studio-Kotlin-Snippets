@@ -1,0 +1,76 @@
+============== SERIALIZING AND DESERIALIZING NESTED OBJECTS ==============
+
+For Custom type, check JSON3.txt
+
+=============== Nested Objects ================
+Assume two data classes, Employee2 and Address
+
+data class Address(
+    @SerializedName("country") val mCountry : String,
+    @SerializedName("city") val mCity : String
+)
+
+data class Employee2(
+    @SerializedName("firstName") val mFirstName: String,
+    @SerializedName("age") val mAge: Int,
+    @SerializedName("mail") val mMail: String,
+    @SerializedName("address") val mAddress: Address
+    )
+
+ ----- MainActivity.kt ----
+
+ ----- 1. Serialization ------
+        val gson = Gson()
+
+        val address2 = Address("Nigeria","Abuja")
+        val emp2 = Employee2("Alex",23,"alex23@email.com", address2)
+        val emp2JsonString = gson.toJson(emp2)
+        Log.d("emp2JsonString", emp2JsonString)   
+// OUTPUT: {"address":{"city":"Abuja","country":"Nigeria"},"age":23,"firstName":"Alex","mail":"alex23@email.com"}
+{
+  "address": {
+    "city": "Abuja",
+    "country": "Nigeria"
+  },
+  "age": 23,
+  "firstName": "Alex",
+  "mail": "alex23@email.com"
+}
+
+
+ ----- Deserialization (2 methods) ------
+    ====== Method A (Assuming it is just a json string NOT stored within a json file, or store sin just a variable) ========
+	NB: Note the backward slash
+	NB: You must have created the data class for this object as well, in this case it is the same 'Employee2' data class 
+
+
+        val gson = Gson()
+
+        val emp2JsonString = "{\"address\":{\"city\":\"Abuja\",\"country\":\"Nigeria\"},\"age\":23,\"firstName\":\"Alex\",\"mail\":\"alex23@email.com\"}"
+        val emp2Object = gson.fromJson(emp2JsonString, Employee2::class.java)
+        Log.d("emp2Obj", emp2Object.toString())
+    // OUTPUT: Employee2(mFirstName=Alex, mAge=23, mMail=alex23@email.com, mAddress=Address(mCountry=Nigeria, mCity=Abuja))
+
+   
+ ====== Method B (Assume a json file 'emp1.json' with content {"age":23,"firstName":"Alex","mail":"alex@email.com"}) ========
+	NB: You must have created the data class for this object as well, in this case it is the same 'Employee' data class 
+
+- Place the json file (ie emp1.json) within the 'assets' directory
+
+
+        val gson = Gson()
+        val emp1JsonString = getJsonDataFromAsset(applicationContext, "emp2.json")	//getJsonDataFromAsset is a custom function, check below.
+
+        val emp2Object = gson.fromJson(emp1JsonString, Employee2::class.java)
+        Log.d("emp2Obj", "Object: ${emp2Object.toString()}")
+
+    fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
+    }

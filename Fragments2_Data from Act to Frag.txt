@@ -50,6 +50,8 @@ class Frag1 : Fragment() {
 
 class Frag1 : Fragment() {
 
+    lateinit var btnClick : Button
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

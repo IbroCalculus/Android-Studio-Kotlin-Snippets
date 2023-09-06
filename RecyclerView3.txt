@@ -1,0 +1,165 @@
+
+NB: Use 'listitem' attribute for the recyclerView within the main layout to preview the recyclerview layout within the IDE
+
+//FOR THIS METHOD, WE ARE PASSING LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW USING A DATA CLASS (More efficient method I believe)
+//CHECK RecyclerView TO GET LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW BY CREATING THE LIST WITHIN THE ADAPTER CLASS (Less efficient method I believe)
+
+- LayoutManager is responsible for putting the views on the screen
+- ViewHolder
+
+
+1. ============== Place RecyclerView on layout and give ID ie recyclerView ======================
+
+2. ============== CREATE RECYCLERVIEW CUSTOM LAYOUT, ie recycler_layout (imageView1, tvText1) ==============
+   Don't forget to change recyler_layout's parent layout(i.e contstraint) to wrap content.
+
+3. ======================== In .kt =================================
+    private lateinit var recyclerView: RecyclerView
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            setHasFixedSize(true)
+        }
+-------------------------------- OR ----------------------------
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView1.setHasFixedSize(true)
+
+
+4. ===== CREATE A DATA CLASS OF TYPE "Data Class" (ie RecyclerDataClass), WHICH IS SIMILAR TO MODEL CLASS IN JAVA ==========
+ ----------------- -----------------
+data class RecyclerDataClass()
+
+-----------------  ---------------
+data class RecyclerDataClass(val imageView1M: Int, val tvText1M: String)
+
+
+5. ====== CREATE AN ADAPTER CLASS, ie RecyclerAdapter1, AND PASS THE LIST OF DATA (ie dataList) WHICH WILL BE CREATED LATER, ALSO EXTEND FROM 'RecyclerView.Adapter as shown ====
+
+//NB: The ViewHolder in RecyclerAdapter1.ViewHolder will be created shortly
+class RecyclerAdapter1(private val dataList: ArrayList<RecyclerDataClass>): RecyclerView.Adapter<RecyclerAdapter1.ViewHolder>() {
+}
+
+6. ====== ALT + ENTER on ViewHolder and Create its class, modify and extend as shown =========
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+    }
+
+7. ===== ALT + ENTER on 'class RecyclerAdapter' and implement the 3 member methods =========
+
+8. ==== the ViewHolder class ====
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        
+        val imageView1: ImageView = itemView.findViewById(R.id.imageView1)
+        val tvText1: TextView = itemView.findViewById(R.id.tvText1)
+
+9. ==== WITHIN onCreateViewHolder ======
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+10. ==== WITHIN getItemCount ====
+    override fun getItemCount(): Int {
+        return  dataList.size
+    }
+
+11. ====== WITHIN onBindViewHolder =========
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val currentItemPosition = dataList[position]
+        holder.imageView1.setImageResource(currentItemPosition.imageView1M)
+        holder.tvText1.text = currentItemPosition.tvText1M
+    }
+
+12. ========== WITHIN .kt File ===============
+    lateinit var recyclerView1: RecyclerView;
+    lateinit var dataList: ArrayList<RecyclerDataClass>
+    lateinit var recyclerAdapter1: RecyclerAdapter1
+
+        recyclerView1 = findViewById(R.id.recyclerView1)
+        recyclerView1.layoutManager = LinearLayoutManager(this)
+        recyclerView1.setHasFixedSize(true)
+
+        dataList = arrayListOf()
+
+        dataList.add(RecyclerDataClass(R.drawable.img1, "First Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img2, "Second Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img1, "First Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img2, "Second Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img1, "First Image"))
+        dataList.add(RecyclerDataClass(R.drawable.img2, "Second Image"))
+
+        recyclerAdapter1 = RecyclerAdapter1(dataList)
+        recyclerView1.adapter = recyclerAdapter1
+
+
+================================= ONCLICK EVENT HANDLER (1. Without starting another activity) ========================
+NB: To show a ripple effect on clicking any item on the recyclerview, with the root of the recycler_layout.xml, add these 3 attributes:
+
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+
+---- Within onBindViewHolder ---
+
+        val currentItemPosition = dataList[position]
+        holder.imageView1.setImageResource(currentItemPosition.imageView1M)
+        holder.tvText1.text = currentItemPosition.tvText1M
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val item = dataList[position]
+            val tvText1Text = item.tvText1M
+            Toast.makeText(context, "You clicked $position with value $tvText1Text", Toast.LENGTH_SHORT).show()
+        }
+
+
+================================= ONCLICK EVENT HANDLER (2. Starting another activity) ========================
+---- Within RecyclerAdapter1 ------- 
+class RecyclerAdapter1(private val dataList: ArrayList<RecyclerDataClass>): RecyclerView.Adapter<RecyclerAdapter1.ViewHolder>(){
+
+    var onItemClick: ((RecyclerDataClass) -> Unit)? = null
+
+
+---- Within onBindViewHolder() -----
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val currentItemPosition = dataList[position]
+        holder.imageView1.setImageResource(currentItemPosition.imageView1M)
+        holder.tvText1.text = currentItemPosition.tvText1M
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val item = dataList[position]
+            val tvText1Text = item.tvText1M
+            val imageView1 = item.imageView1M
+            Toast.makeText(context, "You clicked $position with value $tvText1Text", Toast.LENGTH_SHORT).show()
+
+            onItemClick?.invoke(currentItemPosition)   // This line
+        }
+
+    }
+
+---- Within Main.kt ------
+
+        recyclerAdapter1.onItemClick = { data ->
+            val intent = Intent(this, MainActivity2::class.java)
+            intent.putExtra("image", data.imageView1M)
+            intent.putExtra("text", data.tvText1M)
+            startActivity(intent)
+        }
+
+--- Wthin the second activity (CHECK intents, how to retrieve the data ther ) ---
+        imageView2 = findViewById(R.id.imageView2)
+        tvText2 = findViewById(R.id.tvText2)
+
+        val textValue = intent.getStringExtra("textValue")
+        val imageValue = intent.getIntExtra("imageValue", 0)
+        tvText2.text = textValue;
+        imageView2.setImageResource(imageValue)
+

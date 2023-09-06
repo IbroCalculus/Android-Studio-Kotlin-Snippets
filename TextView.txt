@@ -1,4 +1,6 @@
 
+        tv_disp.setText(getString(R.string.sample_txt))
+
   ============= SOME PROPERTIES =========
 
 1. ------------------- ellipsize (This adds 3 dots (...) to overflow texts -----------------------

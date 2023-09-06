@@ -1,0 +1,5 @@
+Dependency injection is a design pattern (NOT specfic to only android development) that can be applied to any software development language
+2 popular libraries used for implementing depency injections are Dagger (then Dagger2) and Hilt.
+
+Hilt is newer. Dagger (Dagger2) is more complex than Hilt. Hilt is much easier to learn and implement.
+It can be used both in Java and Kotlin.

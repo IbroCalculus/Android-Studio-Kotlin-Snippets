@@ -1,0 +1,63 @@
+============== Passing a list or array of objects ============
+
+data class Address(
+    @SerializedName("country") val mCountry : String,
+    @SerializedName("city") val mCity : String
+)
+
+data class FamilyMember(
+    @SerializedName("role") val mRole: String,
+    @SerializedName("age") val mAge: Int
+)
+
+data class Employee(
+    @SerializedName("firstName") val mFirstName: String,
+    @SerializedName("age") val mAge: Int,
+    @SerializedName("mail") val mMail: String,
+    @SerializedName("address") val mAdrress: Address,
+    @SerializedName("family") val mFamilyMember: Array<FamilyMember>		// Array of family members
+)
+
+
+---- Main.kt -----
+
+        val gson = Gson()
+
+        val family = arrayOf<FamilyMember>(
+            FamilyMember("Husband", 41),
+            FamilyMember("Wife", 35),
+            FamilyMember("Son", 15)
+        )
+
+        val address = Address("Nigeria", "Abuja")
+        val emp3 = Employee("Alex", 34, "Alex@email.com", address, family)
+        val emp3jsonString = gson.toJson(emp3)
+        Log.d("emp3jsonString", emp3jsonString)
+
+OUTPUT:
+{
+  "address": {
+    "city": "Abuja",
+    "country": "Nigeria"
+  },
+  "age": 34,
+  "family": [
+    {
+      "age": 41,
+      "role": "Husband"
+    },
+    {
+      "age": 35,
+      "role": "Wife"
+    },
+    {
+      "age": 15,
+      "role": "Son"
+    }
+  ],
+  "firstName": "Alex",
+  "mail": "Alex@email.com"
+}
+
+========================== DESERIALIZATION CAN BE DONE SIMILARLY ======================
+

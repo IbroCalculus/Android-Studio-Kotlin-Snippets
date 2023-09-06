@@ -1,0 +1,23 @@
+
+The main page is also known as logical parent.
+
+Inside manifest file, for each given activity, set:
+ android:parentActivityName=".MainActivity"/>
+OPTIONALLY:
+ android:label="Go Back"
+
+Example:
+INITIALLY
+
+ <activity android:name=".firstActivity"></activity>
+ <activity android:name=".secondActivity"></activity>
+
+FINALLY
+
+	<activity android:name=".firstActivity"
+  	android:parentActivityName=".MainActivity"
+ 	android:label="Return Home"
+   	  />
+
+	<activity android:name=".secondActivity"
+        android:parentActivityName=".MainActivity"/>

@@ -1,4 +1,18 @@
 CHECK: ViewModel and LiveData
 
-LiveData is an observable data holder.
+LiveData is an observable data holder or class.
 It handles update to data being passed to it, hence, anything observing the LiveData will get dynamic updates.
+
+NB:
+- An observable class is a class that can be observed, while an observer is a class that observes something.
+- MutableLiveData is an updateable LiveData class.
+
+
+============== Advantage of LiveData ============
+- Ensures UI matches data state
+- No memory leaks
+- No crashes due to stopped activities
+- Automatic lifecycle handling
+- Always up to date
+- Handles config changes
+- Resource sharing

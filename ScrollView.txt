@@ -1,0 +1,4 @@
+- Replace constraintLayout with scrollView
+- ScrollView takes only one child, ie another component/layout (vertical linear layout) which will contain other views
+
+The ScrollView scrolls only vertically. To scroll horizontally, use a Horizontal ScrollView

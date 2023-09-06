@@ -1,0 +1,31 @@
+=== ENABLE LOCATION (used to check whether location services are enabled on the device) ===
+Location services allow apps to access the device's current geographical location using various location providers, such as GPS or network-based methods.
+
+--------- Manifest ---------
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+--------- Dependency ---------
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+--------- In Main.kt ---------
+
+        setContentView(R.layout.activity_main)
+
+        if(!isLocationEnabled()){
+            Toast.makeText(this@MainActivity, "The loaction is not enabled", Toast.LENGTH_LONG).show()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        }else{
+            Toast.makeText(this@MainActivity, "The loaction is already turned on", Toast.LENGTH_LONG).show()
+        }
+
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+
+=========== Location Permission =====================

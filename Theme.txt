@@ -1,0 +1,46 @@
+ parent="Theme.MaterialComponents.DayNight.NoActionBar"
+ parent="Theme.Material3.DayNight.NoActionBar"
+
+
+    <!-- Base application theme. -->
+    <style name="Base.Theme.QuizApp_Kotlin" parent="Theme.MaterialComponents.DayNight.NoActionBar">	//Base theme, where other themes inherit from. Modify it children if needed.
+        <!-- Customize your light theme here. -->
+
+         <item name="colorPrimary">#FF0000</item>					// Color on action bar and widgets like buttons
+         <item name="colorOnPrimary">@color/black</item>				// Color of texts on widgets like buttons
+         <item name="colorPrimaryVariant">#0000BB</item>
+         <item name="android:statusBarColor">#0000BB</item>				// Color of the status bar
+         <item name="android:windowBackground">#123456</item>				// Color of the background
+         <item name="android:windowBackground">@drawable/splash_screen</item>		// OR Use an image instead
+
+        <item name="windowActionBar">true</item>			// These 2 are responsible for showing the actionbar and the title within the action bar.
+        <item name="windowNoTitle">false</item>
+
+        <item name="titleTextColor">#000000</item>			// Changes the color of the title on the action bar.
+        <item name="iconTint">#000000</item>				// Changes the menubar icons to the specified color, white by default if DarkActionBar, dark by default if Light.
+    </style>
+
+    <style name="Theme.QuizApp_Kotlin" parent="Base.Theme.QuizApp_Kotlin" />	//This is the default theme called on Manifest. It inherits from the base above
+
+    <style name="Theme.QuizApp_Kotlin.NoActionBar" parent="Base.Theme.QuizApp_Kotlin">		//This is a custom theme that can be applied to just a particular activity via the manifest
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+=============================================================================================================
+
+//Themes & Colors meaning
+
+- colorPrimaryDark -> Status Bar  -> NOW -> statusBarColor & colorPrimaryVariant (default value: ?attr/colorPrimaryVariant & @color/purple_700 respectively)
+- colorPrimary     -> Tool Bar/Action Bar   (default value: @color/purple_500)
+- windowBackground -> Activity Screen -> 
+- NavigationBarColor -> Bottom Navigation Bar
+- colorOnPrimary -> Color on widgets like button text (default value: @color/white)
+- colorAccent -> Color of changing widget, ie checkBox on checked, radioButton on selected, progressbar etc -> NOW -> colorSecondary (defualt value: @color/teal_200)
+
+ 
+       
+
+   
+       

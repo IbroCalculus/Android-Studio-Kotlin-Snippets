@@ -1,0 +1,51 @@
+======= Within values, create Value resource file 'styles.xml' ======
+
+<resources>
+
+
+</resources>
+
+================ Within styles.xml ================
+--- 1. Assume a series of linear layouts, each containing some buttons, and will like all the linear layouts to have the same style.
+
+<resources>
+
+    <style name="buttonRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="backgroundTint">@color/almost_black</item>
+    </style>
+
+--- 2. For each of the button within the linearlayout, give them the same style
+
+<resources>
+    
+    <style name="buttonNumber">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:text">"''"</item>
+        <item name="contentDescription">@string/speakable</item>
+    </style>
+
+
+============= Within xml =============
+For each of the linear layout;
+
+--- 1. For each of the linear layouts ---
+    <LinearLayout
+        style="@style/buttonRow">
+
+    </LinearLayout>
+
+
+--- 2. For each of the buttons ---
+        <Button
+            style="@style/buttonNumber"
+            android:text="7"/>
+
+

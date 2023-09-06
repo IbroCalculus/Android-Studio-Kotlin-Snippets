@@ -1,4 +1,7 @@
-Store and retrieve data as key-value pair
+-Store and retrieve data as key-value pair.
+-Used to save and retrieve primitive data types(ie Integers, floats, booleans, long)
+-The Shared Preference file is managed by an android framework and it can be accessed anywhere within the app
+to read or write data into the file.
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,5 +1,54 @@
-2 Methods:
+//NOTE: To pass string array created in strings.xml to a String array variable in the .kt file
+        var countries_array = resources.getStringArray(R.array.countries_array)
+
+3 Methods:
+
 =========== METHOD 1 (STATIC VALUES )  ==============
+
+Create a string-array resource
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+    </string-array>
+
+
+------ .kt --------------
+    lateinit var spinner1 : Spinner
+
+        spinner1 = findViewById(R.id.spinner1)
+
+        var arrayAdapter = ArrayAdapter.createFromResource(this, R.array.months, android.R.layout.simple_spinner_item)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner1.adapter = arrayAdapter
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
+        }
+    -----------Implement the 2 methods -------------
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+ ------------------------
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val msg = "Clicked: ${parent?.getItemAtPosition(position)} @ position ${position}"
+                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+
+=========== METHOD 2 (STATIC VALUES )  ==============
 
 Create a string-array resource
 
@@ -46,7 +95,7 @@ Create a string-array resource
 
 
 
-=========== METHOD 2 (DYNAMIC VALUES/ VALUES AT RUN TIME )  ==============
+=========== METHOD 3 (DYNAMIC VALUES/ VALUES AT RUN TIME )  ==============
 
         spinner1 = findViewById(R.id.spinner1)
 
@@ -54,9 +103,16 @@ Create a string-array resource
         val adapter1 = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, customList)
         spinner1.adapter = adapter1
 
+	---------------------- OR ----------------------------------------
+        val customList = listOf("One", "Two", "Three", "Four")
+        val adapter1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, customList)	// where simple_list_item_1 is the layout of the items inside the spinner
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)		// where simple_spinner_dropdown_item is the layout of the spinner's dropdown content
+        spinner.adapter = adapter1
+
+
         spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val msg = "Clicked: ${parent?.getItemAtPosition(position)} @ position ${position}"
+                val msg = "Clicked: ${parent.getItemAtPosition(position)} @ position ${position}"
                 Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
             }
 

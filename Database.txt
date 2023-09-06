@@ -1,0 +1,24 @@
+CHECK ALSO: Room Database.
+
+- Database is a digital place where information is categoriszed and stored.
+- You can view a database as an Excel sheet, except we use a query systment in a database known as SQL(Structured Query Language).
+- You can access a database from anywhere within an application.
+
+
+====== SQLite Database ========
+It is an Open Source Database
+It stores data in a text file.
+It comes ready to use on android
+It is a standard relational database. ie data is stored in rows-columns in tables.
+Structured tables are known as schema.
+
+--- Disadvantages: ----
+  1. Lots of lines of code to convert between Java Object and SQL Query
+  2. Errors are not shown during compilation, noticed only during running the application.
+
+
+  ------ ALTERNATIVE TO SQLITE IN ANDROID IS ROOM DATABASE ----
+- Room database is a new concept for creating a database in android applications introduced in 2017
+- Room database creates an Abstract Layer above the SQLite Database.
+- It is preferred over sqlite to ensure data persistency.
+

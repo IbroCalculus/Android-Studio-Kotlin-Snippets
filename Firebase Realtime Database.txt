@@ -1,0 +1,122 @@
+Stores data in NoSQL format, and in realtime.
+
+============ CONNECTING TO FIREBASE =============
+Tools -> Firebase -> Realtime Database -> Get started with Realtime Database -> Connect to Firebase -> Opens Firebase website
+Add project -> Project name -> Continue -> Disable Google analytics (unless if needed) -> Create project -> Continue -> Connect -> RETURN TO ANDROID STUDIO
+(2) Add the Realtime Database SDK to your app -> Accept Changes
+
+-- In firebase project website ---
+Build -> Realtime Database -> Create database -> Start in Test mode (for practice project) -> Enable
+
+=================================================================================================================================
+
+----------------- Data class for the user ----------------
+data class UserData(
+    val id: String? = null,
+    val username: String? = null,
+    val password: String? = null
+)
+
+------------------ The database name in a companion object ----------------
+class Constants {
+    companion object{
+        const val databaseName = "users"
+    }
+}
+
+============ SIGN UP WITH USERNAME AND PASSWORD ===================
+
+    private lateinit var binding: ActivitySignupBinding
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+
+        binding = ActivitySignupBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.reference.child(Constants.databaseName)  //Where databaseName = "users" is from companion object
+
+        binding.apply {
+            signupButton.setOnClickListener {
+                val signupUsername = signupUsername.text.toString()
+                val signupPassword = signupPassword.text.toString()
+
+                if(signupUsername.isNotEmpty() && signupPassword.isNotEmpty()){
+                    signupUser(signupUsername, signupPassword)
+                }else{
+                    Toast.makeText(this@SignupActivity, "Some fields cannot be empty", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
+
+
+    private fun signupUser(username: String, password: String){
+        databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(!snapshot.exists()){
+                    val id = databaseReference.push().key
+                    val userData = UserData(id, username, password)
+                    databaseReference.child(id!!).setValue(userData)
+                    Toast.makeText(this@SignupActivity, "Signup successful!", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                    finish()
+                }else{
+                    Toast.makeText(this@SignupActivity, "User already exists", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@SignupActivity, "Database Error: ${error.message}", Toast.LENGTH_LONG).show()
+            }
+
+        })
+    }
+
+
+============ LOGIN WITH USERNAME AND PASSWORD ===================
+
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.reference.child(Constants.databaseName)  //Where databaseName = "users" is declared in a the custom class Constants companion object.
+
+        binding.apply {
+            loginButton.setOnClickListener {
+                val loginUsername = loginUsername.text.toString()
+                val loginPassword = loginPassword.text.toString()
+                if(loginUsername.isNotEmpty() && loginPassword.isNotEmpty()){
+                    loginUser(loginUsername, loginPassword)
+                }else{
+                    Toast.makeText(this@LoginActivity, "Some fields cannot be empty", Toast.LENGTH_LONG).show()
+                    
+                }
+            }
+        }
+
+
+    private fun loginUser(loginUsername: String, loginPassword: String) {
+        databaseReference.orderByChild("username").equalTo(loginUsername).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    for(userSnapshot in snapshot.children){
+                        val userData = userSnapshot.getValue(UserData::class.java)
+                        if(userData != null && userData.password == loginPassword){
+                            Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            finish()
+                        }
+                        Toast.makeText(this@LoginActivity, "Login Failed!", Toast.LENGTH_LONG).show()                    }
+                }else{
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@LoginActivity, "Database error: ${error.message}", Toast.LENGTH_LONG).show()
+            }
+
+        })
+    }

@@ -6,3 +6,4 @@
             tv_Height.setTextColor(ContextCompat.getColor(this, hColor))
 
             tv_Height.setTextColor(Color.parseColor("#ff0000"))
+            btn_enter.setTextColor(Color.GREEN)

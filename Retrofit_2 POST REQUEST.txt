@@ -1,0 +1,141 @@
+
+MULTIPLE METHODS 
+
+================================ METHOD 1 ============================================
+
+============= CREATE A DATA CLASS ===============
+id is auto incremented by the API, reason why it is within {} and initialized to 0
+
+data class Post(
+    val userId: Int,
+    val title: String,
+    val body: String
+){
+    val id: Int = 0
+}
+
+
+=========== WITHIN THE API INTERFACE =========
+
+interface JsonPlaceHolderApi {
+    @POST("posts")
+    fun createPost(@Body post: Post): Call<Post>
+}
+
+=========== IN MAIN.kt ============
+
+        createPost()
+
+    private fun createPost() {
+        val post1 = Post(20, "New title", "New Text")
+        val call = jsonPlaceHolderApi.createPost(post1)
+        call.enqueue(object : Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+
+--------------------------------- More within the call.enque(new ... -------------------------------------------
+
+        call.enqueue(object : Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if(response.isSuccessful){
+                    var content = ""
+                    val response_code = "CODE: ${response.code()}\n"
+                    val id = "ID: ${post1.id}\n"
+                    val user_id = "User ID: ${post1.userId}\n"
+                    val title = "Title: ${post1.title}\n"
+                    val body = "Body: ${post1.body}"
+                    content = "$response_code$id$user_id$title$body\n\n"
+                    text_view_result.append(content)
+
+                }else{
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+NB: Code 201 means successful,
+    Also, while using jsonplaceholder, it only fakes the response, the data is not stored on the api
+
+
+
+================================ METHOD 2 (FormURLEncoded) ============================================
+
+=========== WITHIN THE API INTERFACE =========
+
+interface JsonPlaceHolderApi {
+
+    @FormUrlEncoded
+    @POST("posts")
+    fun createPost(
+        @Field("userId") userId: Int,
+        @Field("title") title: String,
+        @Field("body") body: String,
+    ): Call<Post>
+}
+
+
+=========== IN MAIN.kt ============
+
+        createPost()
+
+    private fun createPost() {
+
+        val call = jsonPlaceHolderApi.createPost(25, "New title 3", "New Text 3")
+        call.enqueue(object : Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if(response.isSuccessful){
+                    val postResponse = response.body()!!
+                    var content = ""
+                    val response_code = "CODE: ${response.code()}\n"
+                    val id = "ID: ${postResponse.id}\n"
+                    val user_id = "User ID: ${postResponse.userId}\n"
+                    val title = "Title: ${postResponse.title}\n"
+                    val body = "Body: ${postResponse.body}"
+                    content = "$response_code$id$user_id$title$body\n\n"
+                    text_view_result.append(content)
+
+                }else{
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+
+================================ METHOD 3 (Using map to pass contents more dynamically) ============================================
+
+-------------- WITHIN THE API INTERFACE --------------
+
+    @FormUrlEncoded
+    @POST("posts")
+    fun createPost(@FieldMap fields: MutableMap<String, String>): Call<Post>
+
+
+---- WITHIN MAIN.kt ----
+    private fun createPost() {
+
+        val fields = mutableMapOf<String, String>()
+        fields["userId"] = "66"
+        fields["title"] = "new title"
+        fields["body"] = "New text body"
+
+        val call = jsonPlaceHolderApi.createPost(fields)

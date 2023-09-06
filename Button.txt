@@ -1,4 +1,10 @@
 
+//To style a button with predefined styles different from the styles that come with its theme (Check Theme.txt).
+                style="@style/Widget.Material3.Button"				//theme:  parent="Theme.Material3.DayNight.NoActionBar" , it comes with a round corner, you may replace with the below, no round corners.
+                style="@style/Widget.MaterialComponents.Button"			//theme:  parent="Theme.MaterialComponents.DayNight.NoActionBar"
+                style="@style/Widget.AppCompat.Button"  
+
+
         btnClick.setOnClickListener {
             d("btnLog", "You clicked the button")
         }

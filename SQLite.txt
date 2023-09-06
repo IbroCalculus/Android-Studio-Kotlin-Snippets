@@ -1,0 +1,212 @@
+CHECK ALSO: Android project "Notes SQLite App_kotlin"
+
+The table columns are 3, ie; id, name, and phone_number.
+id will be autoincrement.
+
+
+======== Create a model class for it, ie Contact ==========
+
+data class Contact(var id: Int, var name: String, var phoneNumber: String){
+    constructor(name: String, phoneNumber: String): this(-1, name, phoneNumber)		// This because id is autoincrement.
+    constructor(): this(-1,"","")
+}
+
+======== Create a class, Constants, to hold constants ==========
+
+object Constants {
+    const val DATABASE_VERSION = 1
+    const val DATABASE_NAME = "contacts.db"
+    const val TABLE_NAME = "contacts"
+
+    const val KEY_ID = "id"
+    const val KEY_NAME = "name"
+    const val KEY_PHONE_NUMBER = "phoneNumber"
+}
+
+
+======== Create database helper/ handler  class and implement the methods 'onCreate' and 'onUpgrade' ==========  
+
+class DatabaseHandler(context: Context) : SQLiteOpenHelper(
+    context,
+    Constants.DATABASE_NAME,
+    null,
+    Constants.DATABASE_VERSION) {
+}
+
+-------------- After implementing the methods ------------
+class DatabaseHandler(context: Context) : SQLiteOpenHelper(
+    context,
+    Constants.DATABASE_NAME,
+    null,
+    Constants.DATABASE_VERSION) {
+
+    override fun onCreate(db: SQLiteDatabase?) {
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+    }
+}
+
+
+=========== Creating a database table ====================
+
+    override fun onCreate(db: SQLiteDatabase?) {
+        
+        val CREATE_TABLE_CONTACTS = "CREATE TABLE ${Constants.TABLE_NAME} (" +
+                "${Constants.KEY_ID} INT PRIMARY KEY AUTOINCREMENT, " +
+                "${Constants.KEY_NAME} TEXT, " +
+                "${Constants.KEY_PHONE_NUMBER} TEXT" +
+                ")"
+
+        db?.execSQL(CREATE_TABLE_CONTACTS);
+    }
+
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+
+        db?.execSQL("DROP TABLE IF EXISTS ${Constants.TABLE_NAME}")
+        onCreate(db)
+    }
+
+
+============= CRUD OPERATIONS ==============
+
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+
+        db?.execSQL("DROP TABLE IF EXISTS ${Constants.TABLE_NAME}")
+        onCreate(db)
+    }
+    
+
+---------- i. Insert to a database --------------
+    fun addContact(contact: Contact){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(Constants.KEY_NAME, contact.name)
+        values.put(Constants.KEY_PHONE_NUMBER, contact.phoneNumber)
+
+//        insert to row
+        db.insert(Constants.TABLE_NAME, null, values)
+        db.close()
+    }
+
+
+---------- ii. Read from a database table (based on id) --------------
+    fun getContact(id: Int): Contact{
+        val db = this.readableDatabase
+        val cursor = db.query(
+            Constants.TABLE_NAME,
+            arrayOf(Constants.KEY_ID, Constants.KEY_NAME, Constants.KEY_PHONE_NUMBER),
+            Constants.KEY_ID + "=?", arrayOf(id.toString()), null, null, null, null)
+
+        cursor?.let {
+            it.moveToFirst()
+        }
+        return Contact(cursor.getString(0).toInt(), cursor.getString(1), cursor.getString(2))
+        db.close()
+        }
+
+    }
+
+------------ iii. Read all from database table ------------
+
+    fun getAllContacts(): MutableList<Contact>{
+        val db = this.readableDatabase
+        val contactList = mutableListOf<Contact>()
+        val selectAll = "SELECT * FROM ${Constants.TABLE_NAME}"
+        val cursor = db.rawQuery(selectAll, null)
+
+        if (cursor.moveToFirst()){
+            do{
+                val contact = Contact()
+                contact.id = cursor.getString(0).toInt()
+                contact.name = cursor.getString(1)
+                contact.phoneNumber = cursor.getString(2)
+
+//                Add contact to contact list
+                contactList.add(contact)
+            }while (cursor.moveToNext())
+        }
+        return contactList
+        db.close()
+    }
+
+
+----------- iv. Update a database table ---------------
+
+    fun updateContact(contact: Contact): Int{
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(Constants.KEY_NAME, contact.name)
+        values.put(Constants.KEY_PHONE_NUMBER, contact.phoneNumber)
+
+//        Update row
+        return db.update(Constants.TABLE_NAME, values, Constants.KEY_ID + "=?", arrayOf(contact.id.toString()))
+        db.close()
+    }
+
+
+----------- v. Delete value from a database table ---------------
+
+    fun deleteContact(contact: Contact){
+        val db = this.writableDatabase
+        db.delete(Constants.TABLE_NAME, Constants.KEY_ID + "=?",
+        arrayOf(contact.id.toString())
+        )
+    }
+
+
+----------- vi. Count number of rows in database table ---------------
+    fun getContactsCount(): Int{
+        val countQuery = "SELECT * FROM ${Constants.TABLE_NAME}"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(countQuery, null)
+
+        return cursor.count
+    }
+
+======================= Main.kt ===================
+
+
+        textViewData = findViewById(R.id.textViewData)
+
+// ------------  Insert to a database ---------------------
+        val db = DatabaseHandler(this)
+        db.addContact(Contact("Alex","1232454"))
+        db.addContact(Contact("John","643456"))
+        db.addContact(Contact("Maria","99454"))
+        db.addContact(Contact("Anul","345678"))
+        db.addContact(Contact("Kim","745424"))
+
+// ----------- Read from a database table (based on id) -------------
+        val contactById = db.getContact(3)
+        println("It is: $contactById")
+
+// ----------- Update a database table -------------
+        val newContact = db.getContact(1)
+        newContact.name = "Johnson-Morioh"
+        newContact.phoneNumber = "444-555-332"
+        db.updateContact(newContact)
+        println("New Contact: $newContact")
+
+
+// ----------- Delete value from a database table -------------
+        val contact1 = db.getContact(1)
+        val contact2 = db.getContact(2)
+        db.deleteContact(contact1)
+        db.deleteContact(contact2)
+
+
+// ----------- Read all from database table -------------
+        val contactList = db.getAllContacts()
+        var data = ""
+        for(contact in contactList){
+            data += "\nName: ${contact.name} " + "\nPhoneNumber: ${contact.phoneNumber} "
+        }
+        textViewData.text = data
+
+
+// -----------  Count number of rows in database table -------------
+        println("Data count: ${db.getContactsCount()}")
+

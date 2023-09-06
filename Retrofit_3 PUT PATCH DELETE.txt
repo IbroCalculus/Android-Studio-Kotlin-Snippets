@@ -1,0 +1,89 @@
+PUT and PATCH; both are used to update an existing an existing element.
+PUT will completely replace the existing resource with the one sent (override).
+PATCH will only change the properties sent, leaving other same as thery are
+DELETE, just as the name implies
+
+
+---- The data class ----
+data class Post(
+    val userId: Int,
+    val title: String?,		//This is made nullable
+    val body: String
+){
+    val id: Int = 0
+}
+
+
+-------------- WITHIN THE API INTERFACE --------------
+
+    @PUT("posts/{id}")
+    fun putPost(@Path("id") id: Int, @Body post: Post): Call<Post>
+
+    @PATCH("posts/{id}")
+    fun patchPost(@Path("id") id: Int, @Body post: Post): Call<Post>
+
+
+
+---- WITHIN MAIN.kt (using put and patch) ----
+
+    private fun updatePost() {
+        val post1 = Post(25, null, "How are you?")
+//        val call = jsonPlaceHolderApi.putPost(5,post1)	// PUT	
+//        val call = jsonPlaceHolderApi.patchPost(5,post1)	// PATCH
+        call.enqueue(object : Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if(response.isSuccessful){
+                    val postResponse = response.body()!!
+                    var content = ""
+                    val response_code = "CODE: ${response.code()}\n"
+                    val id = "ID: ${postResponse.id}\n"
+                    val user_id = "User ID: ${postResponse.userId}\n"
+                    val title = "Title: ${postResponse.title}\n"
+                    val body = "Body: ${postResponse.body}"
+                    content = "$response_code$id$user_id$title$body\n\n"
+                    text_view_result.append(content)
+
+                }else{
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+
+=========================== DELETE =============================
+
+-------------- WITHIN THE API INTERFACE --------------
+
+    @DELETE("posts/{id}")
+    fun deletePost(@Path("id") id: Int): Call<Unit>
+
+
+---- WITHIN MAIN.kt ----
+    private fun deletePost() {
+        val call = jsonPlaceHolderApi.deletePost(5)
+        call.enqueue(object : Callback<Unit>{
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                if(response.isSuccessful){
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+
+
+
+
+
+

@@ -1,0 +1,158 @@
+
+
+- Retrofit library enables us to pull data from websites via the REST API. It communicates with the server that the website is connect to.
+- Data is shared in JSON format, after which we can convert to any format we want.
+- NB: If the api json data is not well formatted, we can Ctrl+A, paste in a json formatter website (ie jsonformatter.org) for readable formatting.
+
+- For practice, you can use this free sample api (https://jsonplaceholder.typicode.com/posts)
+
+================ ADD INTERNET PERMISSION ============
+    <uses-permission android:name="android.permission.INTERNET" />
+NB: For projects, write code to check if app is connected to the internet, within the kotlin file
+
+================ STILL WITHIN MANIFEST ===============
+
+        android:theme="@style/Theme.RetrofitPractice"
+        
+        android:usesCleartextTraffic="true"           // This line of code
+
+        tools:targetApi="31">
+
+===================== DEPENDENCY ===============
+implementation 'com.squareup.retrofit2:retrofit:(insert latest version)'  presently, implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+Also, add the GSON json converter library; implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+
+===================== GET ONE ROW OF DATA FROM THE API's LIST OF DATA ================
+-Assume to retrieve 4 set of data to be displayed on 4 textviews, ie tvA, tvB, tvC, tvD
+
+========== Sample of data from the API ============
+[
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  },
+
+ie The are 4 group of data to be retrieved, ie userId, id, title and body, hence why 4 textview
+
+============== CREATE A MODEL/DATA CLASS (ie RetrofitModelClass) TO RETRIEVE THE DATA==========
+
+data class RetrofitModelClass(
+    val userId : Int,
+    val id : Int,
+    val title : String,
+
+    @SerializedName("body")
+    val subTitle : String     //Intentionally not named it body as is in the API, hence why @SerializedName("body").
+)
+
+{
+}
+
+============= CREATE AN INTERFACE (RetrofitApiInterface) TO CONVERT THE REST API TO A KOTLIN INTERFACE ==========
+
+interface RetrofitApiInterface {
+
+}
+
+-------- implement the Call method (ie Select option Call <T> retrofit2) after getAllPosts() : ... -------
+
+
+interface RetrofitApiInterface {
+
+    @GET("/posts")                                    //https://jsonplaceholder.typicode.com/posts, WHERE /posts is the last past of the api url
+    fun getRetrofitModelClass() : Call<List<RetrofitModelClass>>  //getRetrofitModelClass is not a constant
+}
+
+
+====================== IN .KT ==========================
+        tvA = findViewById(R.id.tvA)
+
+
+//------ Don't forget to call this function ----
+
+        fun showPosts(){
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())	// Will serialize and deserialize.
+                .build()
+
+            val retrofitApiInterface: RetrofitApiInterface = retrofit.create(RetrofitApiInterface::class.java)
+            val call : Call<List<RetrofitModelClass>> = retrofitApiInterface.getRetrofitModelClass();
+
+            call.enqueue(object : Callback<List<RetrofitModelClass>>{
+                override fun onResponse(
+                    call: Call<List<RetrofitModelClass>>,
+                    response: Response<List<RetrofitModelClass>>
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onFailure(call: Call<List<RetrofitModelClass>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+        }
+
+--------------------------------- More within the call.enque(new ... -------------------------------------------
+
+        call.enqueue(object : Callback<List<RetrofitModelClass>>{
+            override fun onResponse(
+                call: Call<List<RetrofitModelClass>>,
+                response: Response<List<RetrofitModelClass>>
+            ) {
+                if(!response.isSuccessful)
+                {
+                    tvA.text = "Error occurred";
+                    tvB.text = "error occurred";
+                    tvC.text = "Error occurred";
+                    tvD.text = "error occurred";
+                }else{
+
+                    val dataList: List<RetrofitModelClass> = response.body()!! //List of all data
+                    tvA.text = dataList[1].userId.toString()
+                    tvB.text = dataList[1].id.toString()
+                    tvC.text = dataList[0].title
+                    tvD.text = dataList[0].subTitle
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<RetrofitModelClass>>, t: Throwable) {
+                Toast.makeText(applicationContext, "Error occurred retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+        })
+
+
+
+
+
+=============================== SHOWING DATA IN RECYCLERVIEW ======================
+- Do almost all steps as above, apart from the textviews, and their implementations in the call.enqueue...
+
+----------------------- Create a recyclerView (Check recyclerView4 reference) ------------------
+- Don't create a separate model class for the recyclerView, we use the RetrofitModelClass
+- Within the recyclerAdapter, NOTE the "" +, to convert to string & avoid crash   holder.tvA2.setText("" + retrofitModelClass.getUserId());
+- RecyclerAdapter all set
+
+--------- ON JAVA MAIN ------------
+
+    ArrayList<RetrofitModelClass> arrayList;
+
+        call.enqueue(new Callback<List<RetrofitModelClass>>() {
+            @Override
+            public void onResponse(Call<List<RetrofitModelClass>> call, Response<List<RetrofitModelClass>> response) {
+                if(!response.isSuccessful())
+                {
+                }
+                else{
+
+                    arrayList = (ArrayList<RetrofitModelClass>) response.body();
+                    recyclerAdapter = new RecyclerAdapter(arrayList);
+                    recyclerView.setAdapter(recyclerAdapter);
+                }
+            }

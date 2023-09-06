@@ -1,0 +1,45 @@
+ CHECK ALSO; Database (for basic intro)
+
+  ------ ALTERNATIVE TO SQLITE IN ANDROID IS ROOM DATABASE ----
+- Room database is a new concept for creating a database in android applications introduced in 2017
+- Room database creates an Abstract Layer above the SQLite Database.
+- It is preferred over sqlite to ensure data persistency.
+
+
+ The room database has 3 main components, ie
+ 1- Entity: It represents the data in a single row of the table in the database. It is simply a table
+ 2- DAO (Data Access Object): It is a method that is used to access the database
+ 3- Database: It is a class that holds entities and the database versions.
+
+--- Room Database Transactions ---
+Create Database
+Create Table
+Add New Data (Insert)
+Show/retrieve Data in App (Query)
+Data Update (Update)
+Data Delete (Delete)
+
+====== Architectural Room Database ========
+ Room database does not work alone, it works with auxiliary components known as "Architectural Components".
+ Room applications and architectural components will come together to develop android applications.
+
+-The purpose of Architectural Components is to guide the issues such as; management of the application's lifecycle, as well as data persistency while creating the application's architecture.
+These architectural components offers to develope stronger, more sustainable, as well as testable applications.
+
+ They are 3 components that make up the architectural components, and they are;
+1. RoomDatabase
+2. ViewModel
+3. Repository
+ 
+- A ViewModel is a class that is used to store and manage data to be displayed in the User Interface.
+- The viewModel concept ensures that data is not lost and is maintained in configuration change situations such as screen rotation or language change.
+- ViewModel acts as a bridge between data and the user interface such as an activity or fragment. Between the repository and the UI.
+
+==== LiveData ====
+- This constantly monitors changes in the livedata database and reflects it instantly in components such as activities.
+In other words, it performs the task of forwarding the changes in the database live
+
+
+==== Repository ====
+- This manages data exchanges between component databases, ie between local databases or online (known as REST APIs).
+

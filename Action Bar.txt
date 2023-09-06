@@ -1,5 +1,7 @@
 TOOLBAR HAS A DEFUALT HEIGHT OF 56dp
 
- ---- In bothe theme and theme_night ------------
+CHECK ALSO: Toolbar.txt
+
+ ---- In both theme and theme_night ------------
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     <style name="Theme.BMICalcutor" parent="Theme.MaterialComponents.DayNight.NoActionBar">

@@ -1,0 +1,77 @@
+
+============== SERIALIZING SIMPLE DATA ================
+
+GSON is a java library that can be used to convert java or kotlin objects to their JSON representation, and vice-versa.
+
+In summary, serialization in Java and Kotlin, in relation to JSON, is the process of converting objects into a JSON string, while deserialization is the process of reconstructing objects from a JSON string, enabling data exchange and persistence using the JSON format.
+
+In the context of serialization and deserialization, persistence refers to the ability to save an object's state in a durable form that can be stored and retrieved at a later time.
+When an object is serialized, its state is converted into a format that can be persisted, such as a byte stream or a JSON string. This serialized representation can be saved to a file, a database, or any other persistent storage medium. 
+
+In summary, persistence in the context of serialization and deserialization refers to the ability to store an object's state in a durable form, enabling its retrieval and reuse beyond the scope of the current program execution. It facilitates data storage, communication, caching, and integration with object persistence frameworks.
+
+
+//This contains simple serialization and deserialization. For nested objects and more, check JSON2.txt
+
+
+--------------- Dependency ---------------
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
+--------------- Data class ---------------
+data class Employee(val firstName: String, val age: Int, val mail: String)
+ 
+ ----- OR Using Serialization ------
+data class Employee2(
+    @SerializedName("firstName") val mFirstName: String,
+    @SerializedName("age") val mAge: Int,
+    @SerializedName("mail") val mMail: String
+    )
+
+
+--------------- Kotlin Main ---------------
+
+ ----- 1. Serialization ------
+        val gson = Gson()
+        val employee1 = Employee("Alex", 23, "alex@email.com")
+        val emp1JsonString = gson.toJson(employee1)
+        Log.d("employee1Json", emp1JsonString)   // OUTPUT: {"age":23,"firstName":"Alex","mail":"alex@email.com"}
+
+
+ ----- Deserialization (2 methods) ------
+    ====== Method A (Assuming it is just a json string NOT stored within a json file, or stored in just a variable) ========
+	NB: Note the backward slash
+	NB: You must have created the data class for this object as well, in this case it is the same 'Employee' data class 
+
+        val gson = Gson()
+        val emp1JsonString = "{\"age\":23,\"firstName\":\"Alex\",\"mail\":\"alex@email.com\"}"
+        val emp1Object = gson.fromJson(emp1JsonString, Employee::class.java)
+        Log.d("emp1Obj", emp1Object.toString())  // OUTPUT: Employee(firstName=Alex, age=23, mail=alex@email.com)
+
+
+   
+ ====== Method B (Assume a json file 'emp1.json' with content {"age":23,"firstName":"Alex","mail":"alex@email.com"}) ========
+	NB: You must have created the data class for this object as well, in this case it is the same 'Employee' data class 
+
+- Place the json file (ie emp1.json) within the 'assets' directory
+
+        val gson = Gson()
+        val emp1JsonString = getJsonDataFromAsset(applicationContext, "emp1.json")	//getJsonDataFromAsset is a custom function, check below.
+
+        val emp1Object = gson.fromJson(emp1JsonString, Employee::class.java)
+        Log.d("emp1Obj", "Object: ${emp1Object.toString()}")		// OUTPUT: Object: Employee(firstName=Alex, age=23, mail=alex@email.com)
+
+------ Function for reading the .json file contents into a string variable ------
+    fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
+    }
+
+
+

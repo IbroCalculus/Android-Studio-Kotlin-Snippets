@@ -1,4 +1,6 @@
 
+NB: Use 'listitem' attribute for the recyclerView within the main layout to preview the recyclerview layout within the IDE
+
 //FOR THIS METHOD, WE ARE PASSING LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW IN THE ADAPTER CLASS (Less efficient method I believe)
 //CHECK RecyclerView2 TO LEARN HOW TO GET LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW BY USING A DATA CLASS (More efficient method I believe)
 

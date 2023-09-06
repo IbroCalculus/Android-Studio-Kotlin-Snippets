@@ -1,5 +1,17 @@
 
-// Intent to get images from gallery apps
+
+// ===== Example 1: Open a web browser/ Youtube URL ====
+
+        btnImplicit.setOnClickListener {
+            val url = "https://www.youtube.com/"
+            val url = "https://www.youtube.com/"
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        }
+
+
+// ==== Example 2: Intent to get images from gallery apps ========
 
 
     val IMAGE_REQUEST_CODE = 1

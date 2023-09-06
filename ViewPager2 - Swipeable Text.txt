@@ -1,0 +1,51 @@
+
+============ 1. Swipeable Right-Left =================
+NB: This will not swipe continuously, ie Swipe left-right from "One" and ends at "Six", can't swipe forward except backwards, vice-versa.
+
+STEPS:
+1. Add ViewPager2 to XML
+2. Create custom view layout with textView in it. ie vp_viewpager_layout.xml, with TextView (tv_pagerText)
+3. Create an adapter class for the ViewPager, ie ViewPagerAdapter.kt
+	
+--------- Within the adapter class, copy-paste the code within "Start" and "Finish", and modify as needed ---------
+"Start"
+
+class ViewPagerAdapter: RecyclerView.Adapter<ViewHolder>() {
+
+    private val itemList = listOf("One","Two","Three","Four","Five","Six")
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.vp_viewpager_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = itemList[position]
+        holder.bind(item)
+    }
+}
+
+class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+    private val tv_pagerText: TextView = itemView.findViewById(R.id.tv_pagerText)
+    fun bind(item: String){
+        tv_pagerText.text = item
+    }
+}
+
+"Finish"
+
+
+4. In MainActivity.kt
+
+    private lateinit var vp_viewPager: ViewPager2;
+    private lateinit var pagerAdapter: ViewPagerAdapter
+
+        vp_viewPager = findViewById(R.id.vp_viewPager)
+
+        pagerAdapter = ViewPagerAdapter()
+        vp_viewPager.adapter = pagerAdapter

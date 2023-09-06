@@ -1,0 +1,355 @@
+Retrofit basically converts an HTTP api into an interface we can use in our application.
+It allows for both synchronous and asynchronous communication.
+ - Synchronous: Wait for a response after sending a request before proceeding. Synchronous network communication are handled on a background thread.
+ - Asynchronus: Continue other functions after sending requesti. On request result returned, Call a funtion to handle that. Asynchronous communication can be done on the main thread, because this calls a backend API.
+It facilitates data conversion into objects.
+It handles network retries, errors, caching, etc
+
+3 main components (2 mandatory)
+	- 1. POJO (data class)
+	- 2. Interface (which end point we want to communicate, and how)
+	- 3. Service (optional) 
+
+------------ DEPENDENCY -----------
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
+--------------- ADD INTERNET PERMISSION ------------
+    <uses-permission android:name="android.permission.INTERNET" />
+NB: For projects, write code to check if app is connected to the internet, within the kotlin file
+
+-------------- STILL WITHIN MANIFEST ----------
+
+        android:theme="@style/Theme.RetrofitPractice"        
+        android:usesCleartextTraffic="true"           // This line of code
+        tools:targetApi="31">
+
+------------------------------------------------------------------------------------
+The json is an array of these object:
+[
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  },
+.
+.
+.
+]
+
+======================== CREATE A DATA CLASS ====================
+
+data class Post(
+    val userId: Int,
+    val id: Int,
+    val title: String,
+    val body: String
+)
+
+
+======================= CREATE AN INTERFACE THAT REPRESENTS THE API ==================
+
+interface JsonPlaceHolderApi {
+
+    @GET("posts")           			//https://jsonplaceholder.typicode.com/posts, WHERE posts is the last past of the api url (The end point)
+    fun getPosts(): Call<MutableList<Post>>
+}
+
+
+==================== WITHIN MAIN.Kt =====================
+
+    lateinit var text_view_result: TextView
+    lateinit var jsonPlaceHolderApi: JsonPlaceHolderApi
+
+        text_view_result = findViewById(R.id.text_view_result)
+
+        val retrofit = Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi::class.java)
+
+        retrievePosts()
+
+    private fun retrievePosts() {
+        val call = jsonPlaceHolderApi.getPosts()
+
+        call.enqueue(object: Callback<MutableList<Post>>{
+            override fun onResponse(
+                call: Call<MutableList<Post>>,
+                response: Response<MutableList<Post>>
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+--------------------------------- More within the call.enque(new ... -------------------------------------------
+
+        call.enqueue(object: Callback<MutableList<Post>>{
+            override fun onResponse(
+                call: Call<MutableList<Post>>,
+                response: Response<MutableList<Post>>
+            ) {
+                if(response.isSuccessful){
+                    val posts = response.body()!!			//Do not forget to add !!
+                    for(post in posts){
+                        var content = ""
+                        val id = "ID: ${post.id}\n"
+                        val user_id = "User ID: ${post.userId}\n"
+                        val title = "Title: ${post.title}\n"
+                        val body = "Body: ${post.body}"
+                        content = ">>> $id$user_id$title$body\n\n"
+                        text_view_result.append(content)
+                    }
+                }else{
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<MutableList<Post>>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+
+======================================================================================================================
+============================ SIMILARLY (https://jsonplaceholder.typicode.com/posts/1/comments) =======================
+Where the value 1 in "/posts/1/comments" is for a particular id and can be changed.
+
+
+------ METHOD 1 (Not much different from the method 2, just do this and change later for method 2 which is dynamic) -----
+
+- Using same interface
+
+------------------------------------------------------------------------------------
+The json is an array of these object:
+[
+  {
+    "postId": 1,
+    "id": 1,
+    "name": "id labore ex et quam laborum",
+    "email": "Eliseo@gardner.biz",
+    "body": "laudantium enim quasi est quidem magnam voluptate ipsam eos\ntempora quo necessitatibus\ndolor quam autem quasi\nreiciendis et nam sapiente accusantium"
+  },
+.
+.
+.
+]
+
+
+======================== CREATE A DATA CLASS ====================
+
+data class Comment(
+    val postId: Int,
+    val id: Int,
+    val name: String,
+    val email: String,
+    val body: String
+)
+
+
+======================= WITHIN THE INTERFACE THAT REPRESENTS THE API ==================
+
+    @GET("posts")           				//https://jsonplaceholder.typicode.com/posts, WHERE posts is the last past of the api url
+    fun getPosts(): Call<MutableList<Post>>
+
+    @GET("posts/1/comments")
+    fun getComments(): Call<MutableList<Comment>>
+
+
+==================== WITHIN MAIN.Kt =====================
+
+    lateinit var text_view_result: TextView
+    lateinit var jsonPlaceHolderApi: JsonPlaceHolderApi
+
+        val retrofit = Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi::class.java)
+
+        retrieveComments()
+
+
+    private fun retrieveComments() {
+        val call = jsonPlaceHolderApi.getComments()
+
+        call.enqueue(object : Callback<MutableList<Comment>>{
+            override fun onResponse(
+                call: Call<MutableList<Comment>>,
+                response: Response<MutableList<Comment>>
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailure(call: Call<MutableList<Comment>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+
+--------------------------------- More within the call.enque(new ... -------------------------------------------
+
+        call.enqueue(object : Callback<MutableList<Comment>>{
+            override fun onResponse(
+                call: Call<MutableList<Comment>>,
+                response: Response<MutableList<Comment>>
+            ) {
+                if(response.isSuccessful){
+                    val comments = response.body()!!
+                    for(comment in comments){
+                        var content = ""
+                        var postId = "PostID: ${comment.postId}\n"
+                        var id = "ID: ${comment.id}\n"
+                        var name = "Name: ${comment.name}\n"
+                        var email = "Email: ${comment.email}\n"
+                        var body = "Body: ${comment.body}"
+                        content = "$postId$id$name$email$body\n\n"
+                        text_view_result.append(content)
+                    }
+
+                }else{
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<MutableList<Comment>>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error ${t.toString()}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+
+
+----------------- METHOD 2 (This makes changing the value 1 dynamic by passing the value as a function parameter) ----------------------
+All thesame as above method 1, except the stated below:
+
+======================= WITHIN THE INTERFACE THAT REPRESENTS THE API ==================
+
+    @GET("posts")           				//https://jsonplaceholder.typicode.com/posts, WHERE posts is the last past of the api url
+    fun getPosts(): Call<MutableList<Post>>
+
+ ---- INSTEAD OF: ----
+    @GET("posts/1/comments")
+    fun getComments(): Call<MutableList<Comment>>
+
+---- DO: ----
+    @GET("posts/{postId}/comments")
+    fun getComments(@Path("postId") postId: Int): Call<MutableList<Comment>>
+
+
+==================== WITHIN MAIN.Kt =====================
+
+    private fun retrieveComments() {
+        val call = jsonPlaceHolderApi.getComments(4)		// Added the parameter, 4 in this instance.
+
+
+
+
+======================= GETTING DATA USING QUERY STRING ==================
+Using the api; https://jsonplaceholder.typicode.com/posts/, to get data for userId 4;
+
+https://jsonplaceholder.typicode.com/posts/?userId=4    WHERE ?userId=4 is the query
+
+To use this in code;
+
+---- WITHIN THE INTERFACE ----
+
+    @GET("posts")          
+    fun getPosts(@Query("userId") userId: Int): Call<MutableList<Post>>
+
+
+---- WITHIN MAIN.kt ----
+    private fun retrievePosts() {
+        val call = jsonPlaceHolderApi.getPosts(6)
+
+
+
+======================= PASSING MORE THAN 1 QUERY PARAMETER ==================
+https://jsonplaceholder.typicode.com/posts/?userId=6&_sort=id&_order=desc	sort by id in descending order
+
+
+---- WITHIN THE INTERFACE ----
+
+    @GET("posts")
+    fun getPosts(@Query("userId") userId: Int,
+                 @Query("_sort") sort: String,
+                 @Query("_order") order: String
+                 ): Call<MutableList<Post>>
+
+
+---- WITHIN MAIN.kt ----
+    private fun retrievePosts() {
+        val call = jsonPlaceHolderApi.getPosts(6, "id", "desc")
+
+
+======================= GETTING DATA FOR MORE THAN 1 (2) userId ==================
+
+---- WITHIN THE INTERFACE ----
+    @GET("posts")
+    fun getPosts(@Query("userId") userId: Int,
+                 @Query("userId") userId2: Int,
+                 @Query("_sort") sort: String,
+                 @Query("_order") order: String
+                 ): Call<MutableList<Post>>
+
+
+---- WITHIN MAIN.kt ----
+
+    private fun retrievePosts() {
+        val call = jsonPlaceHolderApi.getPosts(6, 3, "id", "desc")
+
+
+======================= GETTING DATA FOR MORE THAN 1 userId (any number, variable argument)  ==================
+
+---- WITHIN THE INTERFACE ----
+    @GET("posts")
+    fun getPosts(@Query("_sort") sort: String,
+                 @Query("_order") order: String,
+                 @Query("userId") vararg : Int,
+                 ): Call<MutableList<Post>>
+
+---- WITHIN MAIN.kt ----
+    private fun retrievePosts() {
+        val call = jsonPlaceHolderApi.getPosts("id", "desc", 2,4,3)
+
+
+
+
+=================== TO PASS QUERY PARAMETERS USING QUERYMAP (Cannot pass multiple values like userId) =================
+
+---- WITHIN THE INTERFACE ----
+    @GET("posts")
+    fun getPosts(@QueryMap parameters: Map<String, String>
+
+---- WITHIN MAIN.kt ----
+    private fun retrievePosts() {
+        val parameters = mutableMapOf<String, String>()
+        parameters["userId"] = "1"
+        parameters["_sort"] = "id"
+        parameters["_order"] = "desc"
+        val call = jsonPlaceHolderApi.getPosts(parameters)
+
+
+
+=================== TO PASS THE END POINT OR ENTIRE URL IN RUNTIME =================
+
+---- WITHIN THE INTERFACE ----
+    @GET	//NB: This is not a mistake, it is simple @GET
+    fun getComments(@Url url: String): Call<MutableList<Comment>>
+
+
+---- WITHIN MAIN.kt ----
+    private fun retrieveComments() {
+//        val call = jsonPlaceHolderApi.getComments("posts/2/comments")
+        val call = jsonPlaceHolderApi.getComments("https://jsonplaceholder.typicode.com/posts/2/comments")

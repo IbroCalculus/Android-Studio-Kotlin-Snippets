@@ -1,0 +1,39 @@
+A toolbar is a more customizable flexible replacement of the actionbar.
+
+
+--------- Toolbar layout ------------
+Create a new layout resource file 'toolbar'of Root Element 'androidx.appcompat.widget.Toolbar'
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"	
+    android:background="@color/purple_500"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+</androidx.appcompat.widget.Toolbar>
+
+NB: android:theme...ActionBar allows the texts on the toolbar to be while instead of black
+    app:popupTheme... Without this property, menu popups on the toolbar will not be visible.
+
+
+--------- In activity .xml ------------
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+--------- In activity .java ------------
+        setContentView(R.layout.activity_main)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)

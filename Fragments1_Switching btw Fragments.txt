@@ -1,4 +1,9 @@
 
+NB: Toast within a fragment:
+            Toast.makeText(requireContext(), "You clicked this button!!", Toast.LENGTH_SHORT).show()
+NB: Removing a fragment, check down below:
+
+
 - Create fragments. i.e; FirstFragment, SecondFragment, ThirdFragment. Delete unnecessary codes from the .kt of each fragments created.
 
 class FirstFragment : Fragment() {
@@ -50,3 +55,23 @@ class FirstFragment : Fragment() {
             }
         }
 
+
+------------- Removing a fragment (Use remove(fragment) ) in place of replace(...) -------------------
+
+    var count = 0;
+
+        btnFrag1.setOnClickListener {
+            if (count == 1){
+                supportFragmentManager.beginTransaction().apply {
+                    remove(firstFragment)
+                    commit()
+                    count = 0
+                }
+            }else {
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.fragmentContainerView1, firstFragment)
+                    commit()
+                    count = 1
+                }
+            }
+        }

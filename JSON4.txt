@@ -1,0 +1,74 @@
+=================== JSON Annotations AND Custom Exclusion Strategy ===============
+
+===== 1. Json Annotations ======
+
+---------- Transient annotation ---------------
+The field with this annotation will not be serialized or deserialized.
+
+data class Employee(
+    @SerializedName("firstName") val mFirstName: String,
+    @SerializedName("age") val mAge: Int,
+    @SerializedName("mail") val mMail: String,
+
+    @Transient val mPassword: String	//This will not be serialized or deserialzied.
+)
+
+
+---------- Expose (including serialize true or false) annotation ---------------
+
+data class Employee(
+    @Expose val mFirstName: String,  // By default, it will serialize and deserialize.
+    @Expose(serialize = false) val mAge: Int,	// Can only deserialize, not serialize
+    @Expose(deserialize = false) val mMail: String,
+    val mPassword: String
+)
+ 
+ ------ Main.kt -------
+
+        val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        val employeeX = Employee("Alex", 23, "alex@email.com", "Abcd1234")
+        val JSONString = gson.toJson(employeeX)
+        Log.d("JSONString", JSONString)
+	OUTPUT: {"mFirstName":"Alex","mMail":"alex@email.com"}
+
+NB: .excludeFieldsWithoutExposeAnnotation() will not exclude all variables without @Exposed annotation.
+
+
+
+
+======== 2. Custom Exclusion Strategy =========
+E.g Exclued all properties that starts with the letter 'a'.
+
+--- 1. The Data class
+
+data class Employee(
+    val firstName: String,
+    val age: Int,
+    val mail: String,
+    val password: String
+)
+
+
+--- 2. Crate a class that implements ExclusionStrategy, and implents the 2 methods, ie;
+
+class MyExclusionStrategy: ExclusionStrategy {
+    override fun shouldSkipField(f: FieldAttributes): Boolean {
+        return f.name.startsWith("a")					// NOTE
+    }
+
+    override fun shouldSkipClass(clazz: Class<*>?): Boolean {
+        return false							// NOTE
+    }
+}
+
+
+--- 3. In Main.kt
+
+
+        val gson = GsonBuilder().setExclusionStrategies(
+            MyExclusionStrategy()
+        ).create()
+        
+        val employeeX = Employee("Alex", 23, "alex@email.com", "Abcd1234")
+        val JSONString = gson.toJson(employeeX)
+        Log.d("JSONString", JSONString)			// OUTPUT: {"firstName":"Alex","mail":"alex@email.com","password":"Abcd1234"}

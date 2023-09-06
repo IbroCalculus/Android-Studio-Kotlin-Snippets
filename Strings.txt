@@ -1,0 +1,2 @@
+-------------------- Set String from string resource --------------
+        btn_enter.setText(getString(R.string.sample_txt))

@@ -1,0 +1,4 @@
+
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"/>	// This allows edittext to adjust when ready to begin typing and softkeyboard comes up, else, soft keyboard may overlap.

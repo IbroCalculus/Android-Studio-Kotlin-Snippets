@@ -1,0 +1,4 @@
+
+
+// Will display text on the textview after 3 seconds
+        questionTextView.postDelayed({questionTextView.text = "This is a post delayed text"},3000)

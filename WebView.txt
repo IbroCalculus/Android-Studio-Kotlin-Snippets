@@ -1,0 +1,37 @@
+https://www.google.com
+
+--------- Enable internet access ------------
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+------------
+NB: Use android:usesCleartextTraffic="true" inside manifest file to avoid error: net::ERR_CLEARTEXT_NOT_PERMITTED
+i.e
+<application
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+
+
+
+------- IN .kt ----------
+    lateinit var webView1: WebView
+
+        webView1 = findViewById(R.id.webView1)
+
+        webView1.webViewClient = WebViewClient()   //enables hyperlinks to open in same app, not external browser
+        webView1.loadUrl("https://www.google.com")
+
+
+=== #Go back in web browser ====
+@Override 
+    public void onBackPressed() {
+        if(webView.canGoBack()){
+            webView.goBack();
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+
+
+

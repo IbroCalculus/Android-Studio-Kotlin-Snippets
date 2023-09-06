@@ -1,7 +1,7 @@
 
 
 
-Re-watch "Android App Development Tutorials for Begnners"
+Re-watch "Android App Development Tutorials for Beginners"
 
     private lateinit var tv_TextView: TextView;
     private lateinit var seekBar: SeekBar;
@@ -13,15 +13,21 @@ Re-watch "Android App Development Tutorials for Begnners"
         seekBar = findViewById(R.id.seekBar);
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                tv_TextView.text = "$p1";
-                if(p2) mediaPlayer?.seekTo(p1)
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                tv_TextView.text = "$progress";
+                if(fromUser) mediaPlayer?.seekTo(progress)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
+                tv_status.setBackgroundColor(Color.GREEN)
+                tv_status.setText("Started tracking")
+                tv_status.setTextColor(Color.WHITE)
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
+                tv_status.setBackgroundColor(Color.RED)
+                tv_status.setText("Stopped tracking")
+                tv_status.setTextColor(Color.BLACK)
             }
 
         })

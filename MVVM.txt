@@ -1,0 +1,21 @@
+MVVM: Model - View - ViewModel. It is an architecture that separates your functionality, your logic into these three different components.
+ - Model: is the part of the application that handles data and business logic.
+ - View:  This is basically the UI. In android, this would be; activities, fragments, layout etc
+ - ViewModel: Connection between the other layers. Provides lifecycle management and data availability.
+
+ViewModel does not have a reference to a View. The ViewModel does not know who is using the data it provides, hence, that reduces the connection between the two.
+
+============ MVVM vs MVP ==========
+The main difference between MVVM and MVP is the observer pattern that is implemented between the View and the ViewModel.
+In MVP, Presenter references the view, whereas ViemModel holds no references.
+In MVP, View - Present = 1 to 1 relationship
+In MVVM, View - ViewModel 1 to many relationship (ie Multiple views can be attached to a ViewModel)
+
+=============== PROBLEMS ADDRESSED BY MVVM ============
+- State persistence across configuration changes
+- Separation of concerns
+- Easier testability
+
+============= 2 PROBLEMS THE ViewModel SOLVES =============
+	- Lifecycle or state problem
+	- Asynchronous calls problem

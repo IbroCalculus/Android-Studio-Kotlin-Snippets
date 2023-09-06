@@ -2,6 +2,9 @@
 - Root layout must be drawerLayout (present in xml code, not in xml design) with id, ie drawerLayout
 
 - Then place any required layout within the drawerLayout, ie constraintLayout, match parents width and height
+ NB: Within drawerLayout;
+
+    tools:openDrawer="start"  // end, right, left. default is start
 
 - Add NavigationView within the drawerLayout with id, ie nav_view. ie
 NB: THE nav_view MUST BE PLACED BELOW THE CONSTRAINT LAYOUT (or any layout developer decides to work with).
@@ -14,9 +17,9 @@ NB: THE nav_view MUST BE PLACED BELOW THE CONSTRAINT LAYOUT (or any layout devel
         android:layout_gravity="start"
         android:fitsSystemWindows="true"/>
 
-- Create a layout resource file for the navigationDrawer header section, ie nav_header (We will be dividing into top and down section)
+- Create layout resource file for the nav header section, ie nav_header (We will be dividing into top and down section), height = ie, 176dp
 
-- Create the resource file that will lie below the navigation header section. ie nav_drawer_menu
+- Create the menu resource file that will lie below the navigation header section. ie nav_drawer_menu
 
 NB: To be able to preview how the menu items will look in the navigation drawer, add these 2 lines of code within the menu;
 
@@ -54,6 +57,12 @@ NB: To be able to preview how the menu items will look in the navigation drawer,
 
         app:headerLayout="@layout/nav_header"   // THIS
         app:menu="@menu/nav_drawer_menu"        // AND THIS
+
+        ---- Optionally ------------
+        app:itemIconTint="#6538ac"
+        app:itemTextColor="#1acd56"
+        android:background="#654321"
+        app:itemIconPadding="16dp"
 
         android:layout_gravity="start"
         android:fitsSystemWindows="true"/>

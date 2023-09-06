@@ -1,0 +1,299 @@
+This is used for animating views.
+There are 2 mechanisms for view animations, ie Tweened Animation and Frame-By-Frame Animation.
+
+- Tweened Animation: This perfoms a series of transformations.
+- Frame-By-Frame Animation: This loads a series of drawable resources sequentially (using AnimationDrawable class)
+
+The main package that we deal with in working with view animation is android.view.animation.
+
+========================================================= 1. TWEENED ANIMATIONS ===============================
+--------- types of animations that can be applied as view animation ----------
+- Translate
+- Alpha
+- Scale
+- Rotate
+
+Interpolator is a concept in the view animaiton system that determines the rate of change for an animation.
+ie Like a keyframe in video editing. E.g: Start fast, then go slow. Or move linearly from start till end.
+
+NB: Method 2 (XML file) is better for creating views animation
+
+================= 1. View Animation in Code ===============
+NB: To do something onAnimationStart, or onAnimationEnd, or onAniationRepeat, scroll down to "Animation Listener"
+Assume a button with id: btnDemo to which view animations are to be applied. Using viewBinding:
+
+
+        binding.apply {
+            btnDemo.setOnClickListener {
+                val myAnimationSet = AnimationSet(true) //This enables us to hold and use multiple animations on a single view. It is not compulsory if you want to pass just a single animation to a view
+                myAnimationSet.duration = 3000
+
+                val translateAnim = TranslateAnimation(0f, 300f, 0f, 300f)
+                val rotateAnim = RotateAnimation(0f, 360f)
+                val alphaAnim = AlphaAnimation(1f, 0.5f)
+                val scaleAnim = ScaleAnimation(1f, 2f, 1f,2f)
+
+                myAnimationSet.apply {
+                    addAnimation(translateAnim)
+                    addAnimation(rotateAnim)
+                    addAnimation(alphaAnim)
+                    addAnimation(scaleAnim)
+                }
+                btnDemo.startAnimation(myAnimationSet)
+
+            }
+        }
+
+================= 2. View Animation in XML ===============
+NB: To do something onAnimationStart, or onAnimationEnd, or onAniationRepeat, scroll down to "Animation Listener"
+We can create the animation inside android resources, and then load them for many different views.
+
+- Create new android resource file (ie my_animation), of resource type; animation. (it will be within the 'anim' folder)
+NB: The <Set tag means animation set, just like in the above.
+
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="3000">  // android:duration="@integer/material_motion_duration_short_1"
+    <translate
+        android:fromXDelta="0%"
+        android:toXDelta="50%"		// 50% of the view width
+        android:fromYDelta="0%"
+        android:toYDelta="150%"		// 150% of the view height
+        />
+
+</set>
+
+--------------------- .kt -----------------
+
+            btnDemo2.setOnClickListener {
+                val myAnimationSet2 = AnimationUtils.loadAnimation(this@ViewsAnimationActivity, R.anim.my_animation)
+                btnDemo2.startAnimation(myAnimationSet2)
+            }
+
+
+
+============================ View Animation for Activity ==========================
+---- To animate transition to another activity, ie SecondActivity ----
+- Within the anim directory, create 2 animation resource files, 'slide_left_out.xml' and 'slide_right_in.xml'
+
+-- slide_left_out.xml --
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="500">
+    <translate
+        android:fromXDelta="0%"
+        android:toXDelta="-100%"
+        />
+</set>
+
+-- slide_right_in.xml --
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="500">
+    <translate
+        android:fromXDelta="100%"
+        android:toXDelta="0%"
+        />
+</set>
+
+ ---- In FirstActivity going to SecondActivity ----
+
+            btnSecondActivity.setOnClickListener {
+                val intent = Intent(this@ViewsAnimationActivity, SecondActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out)
+            }
+
+
+---- To animate transition from Secondactivity back to previous activity ----
+- Within the anim directory, create 2 animation resource files, 'slide_left_in.xml' and 'slide_right_out.xml'
+
+-- slide_left_in.xml --
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="500">
+    <translate
+        android:fromXDelta="-100%"
+        android:toXDelta="0%"
+        />
+</set>
+
+-- slide_right_out.xml --
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:duration="500">
+
+    <translate
+        android:fromXDelta="0%"
+        android:toXDelta="100%"
+        />
+</set>
+
+ ---- Within SecondActivy, onBackPressed ----
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out)
+    }
+
+
+
+============================ Animation Listener =================================
+This enables us to begin another animation when one finishes.
+
+For the above views animation (ie 2. View Animation in XML), between val myAnimationSet2 = AnimationUtils.loadAnimation(this@ViewsAnimationActivity, R.anim.my_animation) AND btnDemo2.startAnimation(myAnimationSet2);
+Assuming we want to begin the transition to next activity animation after the above ends:
+
+            btnDemo2.setOnClickListener {
+                val myAnimationSet2 = AnimationUtils.loadAnimation(this@ViewsAnimationActivity, R.anim.my_animation)
+
+
+                myAnimationSet2.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {
+                        TODO("Not yet implemented")
+                    }
+                })
+
+                
+                btnDemo2.startAnimation(myAnimationSet2)
+            }
+
+
+------------- More on the above --------------
+
+                myAnimationSet2.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {
+                        Toast.makeText(this@ViewsAnimationActivity, "Animation Started", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        Toast.makeText(this@ViewsAnimationActivity, "Button animation finished", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@ViewsAnimationActivity, SecondActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out)
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {
+                        Toast.makeText(this@ViewsAnimationActivity, "Animation repeating", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+
+========================================================= 2. FRAME ANIMATIONS ===============================
+In frame animation, we create a series of frames that are then loaded sequentially and displayed on a view.
+- Copy the series of images to be displayed into the drawable folder. In this example, I have 7 images to show battery charging animation.
+  The images are titled battery_0 to battery_7
+- Add an empty view to the activity of id view1, on which the animation will be displayed:
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSecondActivity" />
+
+- Create new drawable resource file "my_frame_animation" of type animation list. (this should be within the drawable directory)
+
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">  // To run only once, add within;  android:oneshot="true"
+
+    <item android:drawable="@drawable/battery_0" android:duration="200"/>
+    <item android:drawable="@drawable/battery_1" android:duration="200"/>
+    <item android:drawable="@drawable/battery_2" android:duration="200"/>
+    <item android:drawable="@drawable/battery_3" android:duration="200"/>
+    <item android:drawable="@drawable/battery_4" android:duration="200"/>
+    <item android:drawable="@drawable/battery_5" android:duration="200"/>
+    <item android:drawable="@drawable/battery_6" android:duration="200"/>
+    <item android:drawable="@drawable/battery_7" android:duration="200"/>
+
+</animation-list>
+
+----------------- .kt --------------
+
+            btnStartFrameAnimation.setOnClickListener {
+                view1.setBackgroundResource(R.drawable.my_frame_animation)
+                val bganim1 = view1.background
+                if(bganim1 is Animatable){
+                    bganim1.start()
+                }
+            }
+
+            btnStopFrameAnimation.setOnClickListener {
+                view1.setBackgroundResource(R.drawable.my_frame_animation)
+                val bganim1 = view1.background
+                if(bganim1 is Animatable){
+                    bganim1.stop()
+                }
+            }
+
+NB: It keeps repeating
+
+
+=========================================== BACKROUND SELECTOR =============================================
+
+This is like CSS selector, ie; onHover, onPressed, onStateChecked, onStateEnabled etc.
+
+- Create a view with ID viewX
+
+    <View
+        android:id="@+id/viewX"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+- Create new drawable resource file (bg_selector) with root element 'selector' -
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true" android:drawable=""/>
+    <item android:state_hovered="true" android:drawable=""/>
+    <item android:state_enabled="true" android:drawable=""/>
+
+</selector>
+NB: state_hovered will work on an app only if it has a mouse connected to it. Hence, only state_pressed and state_enabled is expected to work. Try other states.
+
+- Create drawable resource files shapes (of type shape) to represent each of the 3 states above (there are many states available, just chosed 3 for this demo).
+ --- enable.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:tint="#00f0ff">
+</shape>
+
+--- hover.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval"
+    android:tint="#00ff00"
+    >
+</shape>
+
+--- press.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<color xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#ff0000">
+</color>
+
+- Back in bg_selector -
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/press"/>
+    <item android:state_hovered="true" android:drawable="@drawable/hover"/>
+    <item android:state_enabled="true" android:drawable="@drawable/enable"/>
+</selector>
+
+----------------- Within the view ------------
+        android:background="@drawable/bg_selector"

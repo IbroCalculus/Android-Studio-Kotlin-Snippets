@@ -1,0 +1,6 @@
+Include:
+- View Animations (View Animations.txt)
+- Animators
+- Transitions
+- Animated Vector Drawables (Animated Vector Drawables.txt)
+- MotionLayout

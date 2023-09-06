@@ -1,5 +1,5 @@
 
-========================== START NEW ACTIVITY =========================
+========================== 1. START NEW ACTIVITY =========================
 
             startActivity(Intent(this, MainActivity2::class.java));
             //startActivity(Intent(this@MainActivity, MainActivity2::class.java))
@@ -15,7 +15,8 @@
                 finish()
             }
 
-=================== INTENT PASSING VALUES TO ANOTHER ACTIVITY =======================
+
+=================== 2. INTENT PASSING VALUES TO ANOTHER ACTIVITY =======================
  ----- First Activity -------
             val textValue = et_et1.text.toString();
 
@@ -42,3 +43,85 @@
         textView2.text = textValue2;
 //        textView2.setText(textValue2)
 
+
+
+====== 3. INTENT RETRIEVING RESPONSE DATA FROM ANOTHER ACTIVITY  ========
+
+- Assume 2 activities, MainActivity and MainActivity2
+- MainActivity with Edittext(et_firstName), Button(btn_getSurname4rmActivity2) view and textView(tv_displayFullName)
+- MainActivity2 with Edittext(et_surname) an button(btn_returnSurnameToActivity1)
+
+------- A. Using deprecated 'startActivityForResult' method -------
+
+-- Within MainActivity.kt --
+    private lateinit var et_firstName: EditText
+    private lateinit var btn_getSurname4rmActivity2: Button
+    private lateinit var tv_displayFullName: TextView
+
+    private val REQUEST_CODE = 1
+
+        btn_getSurname4rmActivity2.setOnClickListener {
+            val intent = Intent(this, MainActivity2::class.java)
+            intent.putExtra("firstName", et_firstName.text.toString())
+            startActivityForResult(intent, REQUEST_CODE)
+        }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            val returned_value = data?.getStringExtra("fullname")
+            tv_displayFullName.text = returned_value
+        }
+    }
+
+
+-- Within MainActivity2.kt --
+    private lateinit var et_surname: EditText
+    private lateinit var btn_returnSurnameToActivity1: Button
+
+        var firtName4frmActivity1 = intent.getStringExtra("firstName")
+
+        btn_returnSurnameToActivity1.setOnClickListener {
+
+            val intent = Intent()
+            intent.putExtra("fullname", "$firtName4frmActivity1 ${et_surname.text.toString()}")
+            setResult(RESULT_OK, intent)
+            finish()
+        }
+
+
+------- B. Using registerForActivityResult  method -------
+
+-- Within MainActivity.kt --
+    private lateinit var et_firstName: EditText
+    private lateinit var btn_getSurname4rmActivity2: Button
+    private lateinit var tv_displayFullName: TextView
+
+    private val activity2ResultLauncher1 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
+        if(result.resultCode == RESULT_OK){
+            val data: Intent? = result.data
+            val returnedValue = data?.getStringExtra("fullname")
+            tv_displayFullName.text = returnedValue
+        }
+
+        setContentView(R.layout.activity_main)
+
+        btn_getSurname4rmActivity2.setOnClickListener {
+            val intent = Intent(this, MainActivity2::class.java)
+            intent.putExtra("firstName", et_firstName.text.toString())
+            activity2ResultLauncher1.launch(intent)
+        }
+
+
+-- Within MainActivity2.kt --
+    private lateinit var et_surname: EditText
+    private lateinit var btn_returnSurnameToActivity1: Button
+
+        var firtName4frmActivity1 = intent.getStringExtra("firstName")
+
+        btn_returnSurnameToActivity1.setOnClickListener {
+            val intent = Intent()
+            intent.putExtra("fullname", "$firtName4frmActivity1 ${et_surname.text.toString()}")
+            setResult(RESULT_OK, intent)
+            finish()
+        }

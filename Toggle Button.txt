@@ -1,0 +1,24 @@
+
+Use attributes: textOn and textOff in .xml
+
+ie textOff : Powered OFF
+   textOn : Powered ON
+
+
+    lateinit var toggleButton: ToggleButton
+
+ 
+        toggleButton = findViewById(R.id.toggleButton);
+
+        toggleButton.isChecked = true
+
+        toggleButton.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if(isChecked){
+                Toast.makeText(this, "Switched ON", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(this, "Switched OFF", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+

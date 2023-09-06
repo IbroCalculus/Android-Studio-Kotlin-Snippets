@@ -1,4 +1,6 @@
 
+NB: Use 'listitem' attribute for the recyclerView within the main layout to preview the recyclerview layout within the IDE
+
 //FOR THIS METHOD, WE ARE PASSING LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW USING A DATA CLASS (More efficient method I believe)
 //CHECK RecyclerView TO GET LIST OF DATA TO BE DISPLAYED ON THE RECYCLERVIEW BY CREATING THE LIST WITHIN THE ADAPTER CLASS (Less efficient method I believe)
 
@@ -33,7 +35,7 @@ data class RecyclerDataClass()
 data class RecyclerDataClass(val ImageView1M: Int, val tvTextView1M : String)
 
 
-5. =========== CREATE AN ADAPTER CLASS, ie RecyclerAdapter, AND PASS THE LIST OF DATA (ie dataList) WHICH WILL BE CREATED LATER =========================
+5. ====== CREATE AN ADAPTER CLASS, ie RecyclerAdapter, AND PASS THE LIST OF DATA (ie dataList) WHICH WILL BE CREATED LATER ====
 
 class RecyclerAdapter(private val dataList: ArrayList<RecyclerDataClass>) {
 }
@@ -60,7 +62,7 @@ class RecyclerAdapter(private val dataList: ArrayList<RecyclerDataClass>) {
 
 
 9. ======== MODIFY class RecyclerAdpater(private val dataList: ... as shown ==========================
-class RecyclerAdapter1(private val dataList: ArrayList<RecyclerDataClass>) : RecyclerView.Adapter<RecyclerAdapter1.ViewHolder>() {
+class RecyclerAdapter(private val dataList: ArrayList<RecyclerDataClass>) : RecyclerView.Adapter<RecyclerAdapter1.ViewHolder>() {
 
 10. ====== ALT + ENTER RecyclerAdapter TO IMPLEMENT THE 3 MEMBER METHODS ==========
 

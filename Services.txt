@@ -4,9 +4,29 @@
 
 - Services have a greater priority than idle or invisble activity.
 
+-A Service is an application component that can perform long-running operations in the background.
+-Services do not provide a user interface.
+-Another application componenet can start a service. E.g button.
+ ie; clicking a button calls a service to begin downloading a file in the background.
+ Music player playing in the background
+ Sending data to a server in the backgroun. etc.
+
+========== Types of Android Services ===========
+1. Foreground Services:
+   The user need to see the process. Eg, downloading a file in the background, and seeing the progress or notification
+
+2. Background Services:
+   The user does not even see the process. No notification or progress indicator. E.g a program that compresses photos in the background.
+
+3. Bound Services:
+   It is dependent on the component that calls itself. 
+   The service interacts with the component permamently that calls itself.
+   when a component that calls itself stops, the service also stops, so service does not continue to work in the background.
+   The relationship is called client-server relation. Where the server is the service, and the client is a component that starts the service.
+
+   Music player application can be an example of bound services.
 
 
-========== Typeos of Android Services ===========
-1. Foreground Services
-2. Background Services
-3. Bound Services
+ Traditionally, there are 2 service classes:
+1. Service Classes: Good for small tasks.
+2. Job Intent Service Classes: Create a separate working thread, faster. For long term background processes.
