@@ -1,4 +1,6 @@
 
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
 1 ============== TABLAYOUT WITH VIEWPAGER2 =================
 
   - Create fragments, ie MondayFragment, TuesdayFragment, WednesdayFragment -

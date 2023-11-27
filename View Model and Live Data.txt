@@ -13,56 +13,105 @@ More like changing keyboard, language settings, enable multi-window mode etc cau
 
 =================== BEFORE ViewModel ===============
 //Changing the orientation will reset any changes, or restart the activity, hence loosing changes.
+// NB: I decide to use viewBinding.
 
-    private lateinit var tv_count: TextView;
-    private lateinit var btn_count: Button
-    var countValue = 0
+    private lateinit var binding: ActivityMainBinding
+    private var counter = 0
 
-        tv_count = findViewById(R.id.tv_count)
-        btn_count = findViewById(R.id.btn_count)
+        binding.apply {
+            tvDisplayCount.text = counter.toString()
 
-        tv_count.setText(countValue.toString())
-
-        btn_count.setOnClickListener {
-            ++countValue
-            tv_count.setText(countvalue.toString())
-        }
+            btnCount.setOnClickListener {
+            	++counter
+                tvDisplayCount.text = counter.toString()
+       }
+}
 
 
 ================== WITH ViewModel ===================
 // This solves the above problem
 
- ----------- Create a kotlin file for the activitie's viewmodel. ie MainActivityViewModel -------------
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
-class MainActivityViewModel : ViewModel() {
+------------ Create a kotlin file for the activitie's viewmodel. ie MyViewModel (better name with relation to the activity, ie MainActivityViewModel -------------
 
-    var countValue = 0
+class MyViewModel: ViewModel() {
+//    The data (or model)
+    private var counter = 0	// This is the data (ie model), but since it is not large, or from sources like a local or online db, hence why it can simply be here.
 
-    fun updateCount(){
-        ++countValue
+
+//    To read the data
+    fun getInitialCounter(): Int {
+        return counter
+    }
+
+
+//    To udate the data
+    fun getUpdatedCounter(): Int {
+        return ++counter
     }
 }
 
+
 ------------ In MainActivity.kt ------------------
 
-    private lateinit var tv_count: TextView;
-    private lateinit var btn_count: Button;
-    var countValue = 0
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var myViewModel: MyViewModel
 
-    private lateinit var viewModel: MainActivityViewModel
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btn_count = findViewById(R.id.btn_count)
-        tv_count = findViewById(R.id.tv_count)
+        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        tv_count.text = viewModel.countValue.toString()
+        binding.apply {
+            tvDisplayCount.text = myViewModel.getInitialCounter().toString()
 
-        btn_count.setOnClickListener {
-            viewModel.updateCount()
-            tv_count.setText(viewModel.countValue.toString())
+            btnCount.setOnClickListener {
+                tvDisplayCount.text = myViewModel.getUpdatedCounter().toString()
+            }
         }
+
+
+------------- ViewModel Factory ----------------
+The ViewModel factory is what allows us to customize the ViewModel. ie pass a value as an argument to the count variable. 
+ - 1. Add the constructor for the parameters to be passed into the ViewModel class (ie MyViewModel) and initialize using the init block.
+
+class MyViewModel(startingNum:Int): ViewModel() {
+    private var counter = 0
+    init {
+        counter = startingNum
+    }
+
+ - 2. Create ViewModel factory class (ie MyViewModelFactory)
+
+class MyViewModelFactory(private val startingNum:Int) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(MyViewModel::class.java)){
+            return MyViewModel(startingNum) as T
+        }
+        throw IllegalArgumentException("Unknown View Model Class")
+    }
+}
+
+ - 3. In Main.kt -
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var myViewModel: MyViewModel
+    private lateinit var factory: MyViewModelFactory
+
+        factory = MyViewModelFactory(52)        // Initial value will be 52
+        myViewModel = ViewModelProvider(this,factory).get(MyViewModel::class.java)	//NB: the 'factory' after this.
+
+        binding.apply {
+            tvDisplayCount.text = myViewModel.getInitialCounter().toString()
+
+            btnCount.setOnClickListener {
+                tvDisplayCount.text = myViewModel.getUpdatedCounter().toString()
+            }
+        }
+
+
 
 
 
@@ -115,3 +164,9 @@ class MainActivityViewModel : ViewModel() {
             viewModel.incrementCount()
 //            tvCount.text = viewModel.count.toString()
         }
+
+
+
+
+
+=========== ViewModel ====================
