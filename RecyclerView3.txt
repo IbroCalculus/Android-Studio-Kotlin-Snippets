@@ -98,7 +98,7 @@ class RecyclerAdapter1(private val dataList: ArrayList<RecyclerDataClass>): Recy
 
 
 ================================= ONCLICK EVENT HANDLER (1. Without starting another activity) ========================
-NB: To show a ripple effect on clicking any item on the recyclerview, with the root of the recycler_layout.xml, add these 3 attributes:
+NB: To show a ripple effect on clicking any item on the recyclerview, within the root of the recycler_layout.xml, add these 3 attributes:
 
     android:clickable="true"
     android:focusable="true"

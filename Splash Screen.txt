@@ -1,0 +1,55 @@
+============ SplashScreen using the latest 2023 API ====================
+
+//    Spash screen dependency
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+- Place a logo with transparent background in drawable directory, ie snapchat_logo.png (512 x 512 px worked fine)
+- In colors.xml:
+    <color name="yellow">#FFFC00</color>
+
+- In themes folder;
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SplashScreen_kotlin" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.SplashScreen_kotlin" parent="Base.Theme.SplashScreen_kotlin" />
+
+<!--------------------------------     Add This ----------------------------------->
+
+    <style name="Theme.SplashScreen_splashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/yellow</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/snapchat_logo</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.SplashScreen_kotlin</item>
+    </style>
+</resources>
+
+
+- In Mainfest.xml
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.SplashScreen_splashScreenTheme"			// Add the theme in the first page
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+- In Main.kt
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Thread.sleep(3000)						// This (duration of splash)
+        installSplashScreen()						// and this
+        setContentView(R.layout.activity_main)
+    }
+}
+
