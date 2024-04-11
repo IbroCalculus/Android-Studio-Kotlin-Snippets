@@ -19,7 +19,8 @@ a horizontal scrollview, then set scrollHorizontally property of the textview to
         android:singleLine="true"
         android:scrollHorizontally="true"
         android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"/>
+        android:marqueeRepeatLimit="marquee_forever"
+    	android:layoutDirection="rtl"/>
 
 https://www.ondemandassessment.com
 CRS-VLZt-5Sy3-Ew9fS
